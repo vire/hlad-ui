@@ -1,0 +1,13 @@
+.normal {
+  color: gray;
+  font-size: 48pt;
+  height: 100px;
+}
+
+.edit {
+  position: absolute;
+  top: 0.5rem;
+  right: 0;
+  font-size: 15px;
+  cursor: pointer;
+}
