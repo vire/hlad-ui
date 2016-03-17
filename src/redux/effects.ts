@@ -11,3 +11,15 @@ export const FirebaseStartEffect = {
     stream$.subscribe(value => dispatch(value));
   }
 };
+
+export const UpdateResourceEffect = {
+  data(key, value) {
+    this.key = key;
+    this.value = value;
+    return this;
+  },
+
+  execute() {
+    FirebaseService.update(this.key, this.value);
+  }
+};

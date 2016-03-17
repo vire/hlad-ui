@@ -14,13 +14,13 @@ export const decorateReducer = (reducer) => (state, action) => {
         if (!action[ACTION_EXECUTED]) {
           sideEffects.push(effect);
         }
-
-        Object.defineProperty(action, ACTION_EXECUTED, { value: true });
-
-        return result.set('effects', List()); // clear the effects in state
       });
+
+      Object.defineProperty(action, ACTION_EXECUTED, { value: true });
+      return result.set('effects', List());
     }
   }
+
   return result;
 };
 
@@ -36,7 +36,9 @@ export const storeEffectEnhancer = (next) => (reducer, initialState) => {
   store.subscribe(() => {
     const { dispatch, getState } = store;
     while (sideEffects.length > 0) {
-      effectsHandler(sideEffects.shift(), { dispatch, getState });
+      const effect = sideEffects.shift();
+      console.log('handling effect', effect)
+      effectsHandler(effect, { dispatch, getState });
     }
   });
   return store;

@@ -18,5 +18,58 @@ export const FirebaseService = {
       }));
 
     return subject$;
-  }
+  },
+
+  create(key, value) {
+    this.rootRef
+      .child(key)
+      .push()
+      .set(value, (err) => {
+        if (err) {
+          this.subject$.next({
+            type: 'RESOURCE_NOT_CREATED',
+            payload: {
+              value,
+              error: err,
+            }
+          });
+        } else {
+          this.subject$.next({
+            type: 'RESOURCE_CREATED',
+            payload: {
+              value,
+            }
+          });
+        }
+      });
+  },
+
+  update(key, value) {
+    const { id, name, recipeType, structure, URL } = value;
+    this.rootRef
+      .child(`${key}/${id}`)
+      .update({
+        name,
+        type: recipeType,
+        structure,
+        url: URL,
+      }, (err) => {
+        if (err) {
+          this.subject$.next({
+            type: 'RESOURCE_UPDATE_FAILED',
+            payload: {
+              value,
+              error: err,
+            }
+          });
+        } else {
+          this.subject$.next({
+            type: 'RESOURCE_UPDATED',
+            payload: {
+              value,
+            }
+          });
+        }
+      });
+  },
 };

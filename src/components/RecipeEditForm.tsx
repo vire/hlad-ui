@@ -2,6 +2,7 @@ import * as React from 'react';
 
 interface IRecipeEditFormProps {
   editing: boolean;
+  id: string;
   url: string;
   name: string;
   type: string;
@@ -48,7 +49,7 @@ export default class RecipeEditForm extends React.Component<IRecipeEditFormProps
 
   handleChangeType(event) {
     const newState = Object.assign({}, this.state, {
-      type: event.target.value,
+      recipeType: event.target.value,
     });
 
     this.setState(newState);
@@ -73,6 +74,7 @@ export default class RecipeEditForm extends React.Component<IRecipeEditFormProps
 
     if (name.length > 3) {
       this.props.onSave({
+        id: this.props.id,
         name,
         URL,
         recipeType,
@@ -109,7 +111,7 @@ export default class RecipeEditForm extends React.Component<IRecipeEditFormProps
               <label>Text</label>
               <textarea
                   onChange={this.handleChangeStructure.bind(this)}
-                  value={JSON.stringify(this.state.structure, null, 4)}/>
+                  value={this.state.structure}/>
             </div>
           </div>
           <br></br>
