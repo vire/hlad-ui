@@ -37,7 +37,7 @@ export const storeEffectEnhancer = (next) => (reducer, initialState) => {
     const { dispatch, getState } = store;
     while (sideEffects.length > 0) {
       const effect = sideEffects.shift();
-      console.log('handling effect', effect)
+      console.log('handling effect', effect);
       effectsHandler(effect, { dispatch, getState });
     }
   });

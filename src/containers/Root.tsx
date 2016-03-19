@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import App from '../components/App';
+import Recipes from '../components/Recipes';
 
 const initAction = () => {
   return {
@@ -17,7 +17,7 @@ export class Root extends React.Component<any, void> {
   render() {
     return (
       <div className="ui container">
-        <App/>
+        <Recipes/>
       </div>
     );
   }

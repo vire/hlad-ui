@@ -6,12 +6,13 @@ const style = require('./style.css');
 
 interface RecipeProps {
   editing: boolean;
-  url: string;
+  URL: string;
   name: string;
   type: string;
-  id: any;
+  ID: string;
   structure?: any;
   onEdit: any;
+  onCancel: any;
   onSave: any;
 }
 
@@ -20,7 +21,7 @@ const formatURL = URL => URL.split(':')[1].slice(2);
 export default class Recipe extends React.Component<RecipeProps, {}> {
 
   handleClick() {
-    this.props.onEdit(this.props.id);
+    this.props.onEdit(this.props.ID);
   }
 
   render() {
@@ -41,7 +42,7 @@ export default class Recipe extends React.Component<RecipeProps, {}> {
             </div>
           </div>
           <div className="item">
-            <a href={this.props.url} target="_blank">{formatURL(this.props.url)}</a>
+            <a href={this.props.URL} target="_blank">{formatURL(this.props.URL)}</a>
           </div>
           { this.props.structure
             ? (

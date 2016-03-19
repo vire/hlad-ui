@@ -26,7 +26,7 @@ export const FirebaseService = {
       .push()
       .set(value, (err) => {
         if (err) {
-          this.subject$.next({
+          this.subject$.error({
             type: 'RESOURCE_NOT_CREATED',
             payload: {
               value,
@@ -52,10 +52,10 @@ export const FirebaseService = {
         name,
         type: recipeType,
         structure,
-        url: URL,
+        URL: URL,
       }, (err) => {
         if (err) {
-          this.subject$.next({
+          this.subject$.error({
             type: 'RESOURCE_UPDATE_FAILED',
             payload: {
               value,

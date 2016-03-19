@@ -1,34 +1,28 @@
 import * as React from 'react';
 
-interface IRecipeEditFormProps {
-  editing: boolean;
-  ID: string;
+abstract class NewRecipeFromState {
+  name: string;
   URL: string;
-  name: string;
-  type: string;
-  structure?: any;
-  onSave: any;
-  onCancel: any;
-}
-
-interface IRecipeEditFormState {
-  name: string;
   nameErrorMessage: string;
   recipeType: string;
   structure: string;
-  URL: string;
 }
 
-export default class RecipeEditForm extends React.Component<IRecipeEditFormProps, IRecipeEditFormState> {
+abstract class NewRecipeFromProps {
+  onCancel: any;
+  onSave: any;
+}
+
+export default class NewRecipeFrom extends React.Component<NewRecipeFromProps , NewRecipeFromState> {
 
   constructor(props) {
     super(props);
     this.state = {
-      name: props.name || '',
+      name: '',
       nameErrorMessage: '',
-      URL: props.URL || '',
-      recipeType: props.type || 'standard',
-      structure: props.structure || '',
+      URL: '',
+      recipeType: '',
+      structure: '',
     };
   }
 
@@ -65,7 +59,7 @@ export default class RecipeEditForm extends React.Component<IRecipeEditFormProps
   }
 
   handleClickDiscard() {
-    this.props.onCancel(this.props.ID);
+    this.props.onCancel();
   }
 
   handleClickSave() {
@@ -74,10 +68,9 @@ export default class RecipeEditForm extends React.Component<IRecipeEditFormProps
 
     if (name.length > 3) {
       this.props.onSave({
-        id: this.props.ID,
         name,
         URL,
-        recipeType,
+        type: recipeType,
         structure
       });
     } else {
@@ -110,8 +103,8 @@ export default class RecipeEditForm extends React.Component<IRecipeEditFormProps
             <div className="field">
               <label>Text</label>
               <textarea
-                  onChange={this.handleChangeStructure.bind(this)}
-                  value={this.state.structure}/>
+                onChange={this.handleChangeStructure.bind(this)}
+                value={this.state.structure}/>
             </div>
           </div>
           <br></br>
