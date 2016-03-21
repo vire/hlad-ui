@@ -10,11 +10,13 @@ interface RecipesProps {
   dispatch: any;
   recipes: Immutable.Iterable<any, any>;
   displayNewForm: boolean;
+  currentTest: any;
 }
 
 const mapStateToProps = state => ({
   displayNewForm: state.get('displayNewForm'),
   recipes: state.get('recipes'),
+  currentTest: state.get('currentTest'),
 });
 
 export class Recipes extends React.Component<RecipesProps, {}> {
@@ -29,6 +31,10 @@ export class Recipes extends React.Component<RecipesProps, {}> {
 
   handleSaveNew(recipe) {
     this.props.dispatch(Actions.saveRecipe(recipe));
+  }
+
+  handleTestNew(recipe) {
+    this.props.dispatch(Actions.testNewRecipe(recipe));
   }
 
   handleCancel(id) {
@@ -67,7 +73,9 @@ export class Recipes extends React.Component<RecipesProps, {}> {
         {
           this.props.displayNewForm
             ? <NewRecipeFrom
+                 currentTest={this.props.currentTest}
                  onSave={this.handleSaveNew.bind(this)}
+                 onTest={this.handleTestNew.bind(this)}
                  onCancel={this.handleCancelNew.bind(this)}/>
             : content
         }

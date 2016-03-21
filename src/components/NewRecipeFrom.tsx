@@ -1,16 +1,22 @@
 import * as React from 'react';
+import * as jsyaml from 'js-yaml';
+import classNames from 'classnames';
+import TestResult from './TestResult';
 
 abstract class NewRecipeFromState {
   name: string;
   URL: string;
-  nameErrorMessage: string;
   recipeType: string;
-  structure: string;
+  structure: any;
+  structureText: string;
+  structureError: Error;
 }
 
 abstract class NewRecipeFromProps {
   onCancel: any;
   onSave: any;
+  onTest: any;
+  currentTest: any;
 }
 
 export default class NewRecipeFrom extends React.Component<NewRecipeFromProps , NewRecipeFromState> {
@@ -19,10 +25,11 @@ export default class NewRecipeFrom extends React.Component<NewRecipeFromProps , 
     super(props);
     this.state = {
       name: '',
-      nameErrorMessage: '',
       URL: '',
-      recipeType: '',
-      structure: '',
+      recipeType: 'standard',
+      structureText: '',
+      structureError: null,
+      structure: null,
     };
   }
 
@@ -52,7 +59,7 @@ export default class NewRecipeFrom extends React.Component<NewRecipeFromProps , 
 
   handleChangeStructure(event) {
     const newState = Object.assign({}, this.state, {
-      structure: event.target.value,
+      structureText: event.target.value,
     });
 
     this.setState(newState);
@@ -80,11 +87,40 @@ export default class NewRecipeFrom extends React.Component<NewRecipeFromProps , 
     }
   }
 
+  handleClickTest() {
+    const { name, URL, recipeType, structure } = this.state;
+
+    this.props.onTest({
+        name,
+        URL,
+        type: recipeType,
+        structure
+      });
+  }
+
+  handleBlur(event) {
+    let structure = null;
+    let structureError = null;
+
+    try {
+      structure = jsyaml.safeLoad(event.target.value);
+    } catch (err) {
+      structureError = err;
+    }
+
+    const newState = Object.assign({}, this.state, {
+      structureError,
+      structure,
+    });
+
+    this.setState(newState);
+  }
+
   render() {
     return (
       <div className="ui segment">
         <div className="ui list">
-          <div className="ui form">
+          <div className={classNames('ui form', { error: !!this.state.structureError})}>
             <div className="field">
               <label>Name</label>
               <input type="text" onChange={this.handleChangeName.bind(this)} value={this.state.name}/>
@@ -100,15 +136,39 @@ export default class NewRecipeFrom extends React.Component<NewRecipeFromProps , 
                 <option value="custom">Custom</option>
               </select>
             </div>
-            <div className="field">
+            <div className={classNames('field', {error: !!this.state.structureError})}>
+              <button className="ui labeled icon button">
+                <i className="add square icon"></i>
+                Add
+              </button>
               <label>Text</label>
               <textarea
+                onBlur={this.handleBlur.bind(this)}
                 onChange={this.handleChangeStructure.bind(this)}
-                value={this.state.structure}/>
+                value={this.state.structureText}/>
+              {
+                this.state.structureError
+                  ? (
+                      <div className="ui error message">
+                        <p>{this.state.structureError.message}</p>
+                      </div>
+                    )
+                  : null
+              }
             </div>
+            {
+              this.props.currentTest
+                ? (
+                    <div className="field">
+                      <TestResult {...this.props.currentTest}/>
+                    </div>
+                  )
+                : null
+            }
           </div>
           <br></br>
           <div className="ui primary button" onClick={this.handleClickSave.bind(this)}>Save</div>
+          <div className="ui teal button" onClick={this.handleClickTest.bind(this)}>Test</div>
           <div className="ui button" onClick={this.handleClickDiscard.bind(this)}>Discard</div>
         </div>
       </div>

@@ -36,4 +36,4 @@ export const CreateResourceEffect = {
   execute() {
     FirebaseService.create(this.key, this.value);
   }
-}
+};

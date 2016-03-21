@@ -17,17 +17,25 @@ export const FirebaseService = {
         payload: snapshot.val(),
       }));
 
+    rootRef
+      .child('tests')
+      .on('value', snapshot => subject$.next({
+        type: 'RECEIVED_TESTS',
+        payload: snapshot.val(),
+      }));
+
     return subject$;
   },
 
   create(key, value) {
+    const PREFIX = key.toUpperCase(); // TESTS, RECIPES
     this.rootRef
       .child(key)
       .push()
       .set(value, (err) => {
         if (err) {
           this.subject$.error({
-            type: 'RESOURCE_NOT_CREATED',
+            type: `${PREFIX}_NOT_ADDED`,
             payload: {
               value,
               error: err,
@@ -35,7 +43,7 @@ export const FirebaseService = {
           });
         } else {
           this.subject$.next({
-            type: 'RESOURCE_CREATED',
+            type: `${PREFIX}_ADDED`,
             payload: {
               value,
             }
@@ -45,6 +53,7 @@ export const FirebaseService = {
   },
 
   update(key, value) {
+    const PREFIX = key.toUpperCase(); // TESTS, RECIPES
     const { id, name, recipeType, structure, URL } = value;
     this.rootRef
       .child(`${key}/${id}`)
@@ -56,7 +65,7 @@ export const FirebaseService = {
       }, (err) => {
         if (err) {
           this.subject$.error({
-            type: 'RESOURCE_UPDATE_FAILED',
+            type: `${PREFIX}_NOT_UPDATED`,
             payload: {
               value,
               error: err,
@@ -64,7 +73,7 @@ export const FirebaseService = {
           });
         } else {
           this.subject$.next({
-            type: 'RESOURCE_UPDATED',
+            type: `${PREFIX}_UPDATED`,
             payload: {
               value,
             }
