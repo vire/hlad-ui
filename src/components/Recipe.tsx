@@ -1,32 +1,69 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import RecipeEditForm from './RecipeEditForm';
+import NewRecipeFrom from './NewRecipeFrom';
 
 const style = require('./style.css');
 
-interface RecipeProps {
-  editing: boolean;
+interface IRecipeStructure {
+  main?: any;
+  side?: any;
+}
+
+interface ITestModel {
+  name: string;
+  URL: string;
+  type: string;
+  structure: IRecipeStructure;
+  result?: any;
+}
+
+interface IRecipeModel {
+  structure?: IRecipeStructure;
   URL: string;
   name: string;
   type: string;
   ID: string;
-  structure?: any;
-  onEdit: any;
-  onCancel: any;
-  onSave: any;
+}
+
+interface IRecipeProps extends IRecipeModel {
+  editing: boolean;
+  onEdit(ID: string): void;
+  onCancel(ID: string): void;
+  onSave(recipe: any): void;
+  onTest(test: ITestModel): any;
+  currentTest: ITestModel;
 }
 
 const formatURL = URL => URL.split(':')[1].slice(2);
 
-export default class Recipe extends React.Component<RecipeProps, {}> {
+export default class Recipe extends React.Component<IRecipeProps, {}> {
 
   handleClick() {
     this.props.onEdit(this.props.ID);
   }
 
+  handleSave(test) {
+    this.props.onSave(Object.assign({}, test, { id: this.props.ID }));
+  }
+
+  handleCancel() {
+    this.props.onCancel(this.props.ID);
+  }
+
   render() {
     if ( this.props.editing) {
-      return (<RecipeEditForm {...this.props}/>);
+      return (
+        <NewRecipeFrom
+          onSave={this.handleSave.bind(this)}
+          onCancel={this.handleCancel.bind(this)}
+          onTest={this.props.onTest}
+          currentTest={this.props.currentTest}
+          name={this.props.name}
+          URL={this.props.URL}
+          structure={this.props.structure}
+          type={this.props.type}
+        />
+      );
     }
 
     return (

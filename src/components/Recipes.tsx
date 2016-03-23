@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
+import classNames from 'classnames';
 import Recipe from './Recipe';
 import NewRecipeFrom from './NewRecipeFrom';
 import * as Actions from '../redux/rootReducer';
@@ -11,12 +12,14 @@ interface RecipesProps {
   recipes: Immutable.Iterable<any, any>;
   displayNewForm: boolean;
   currentTest: any;
+  testerActive: boolean;
 }
 
 const mapStateToProps = state => ({
   displayNewForm: state.get('displayNewForm'),
   recipes: state.get('recipes'),
   currentTest: state.get('currentTest'),
+  testerActive: state.get('testerActive'),
 });
 
 export class Recipes extends React.Component<RecipesProps, {}> {
@@ -53,6 +56,8 @@ export class Recipes extends React.Component<RecipesProps, {}> {
     const recipes = this.props.recipes.toArray().map(
       (recipe, idx) => (
         <Recipe key={idx}
+            currentTest={this.props.currentTest}
+            onTest={this.handleTestNew.bind(this)}
             onEdit={this.handleEdit.bind(this)}
             onSave={this.handleSave.bind(this)}
             onCancel={this.handleCancel.bind(this)}
@@ -60,10 +65,20 @@ export class Recipes extends React.Component<RecipesProps, {}> {
       )
     );
 
+    const testerClass = classNames(
+      'ui',
+      {
+        'green': this.props.testerActive,
+        'red': !this.props.testerActive
+      },
+      'large label'
+    );
+
     const content = (
       <div>
         <button className="ui secondary button"
                 onClick={this.handleAddNew.bind(this)}>Add</button>
+        <div className={testerClass}>recipe tester</div>
         { recipes }
       </div>
     );

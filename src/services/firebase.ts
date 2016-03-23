@@ -1,84 +1,84 @@
-import { Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 
-export const FirebaseService = {
-  subject$: null,
+interface IFirebaseService {
+  rootRef?: Firebase;
+  init: any;
+  create(key: string, value: any): Observable<{}>;
+  update(key: string, value: any): Observable<{}>;
+}
+
+export const FirebaseService: IFirebaseService  = {
   rootRef: null,
 
-  init(rootRef) {
+  init(rootRef: Firebase, keys: Array<string>) {
     this.rootRef = rootRef;
 
-    const subject$ = new Subject();
-    this.subject$ = subject$;
-
-    rootRef
-      .child('recipes')
-      .on('value', snapshot => subject$.next({
-        type: 'RECEIVED_RECIPES',
-        payload: snapshot.val(),
-      }));
-
-    rootRef
-      .child('tests')
-      .on('value', snapshot => subject$.next({
-        type: 'RECEIVED_TESTS',
-        payload: snapshot.val(),
-      }));
-
-    return subject$;
+    return Observable.create(observer => {
+      keys.forEach((keyName) => {
+        rootRef
+          .child(keyName)
+          .on('value', snapshot => observer.next({
+            type: `RECEIVED_FROM_${keyName.toUpperCase()}`, // e.g. RECEIVED_FROM_TESTS
+            payload: snapshot.val(),
+          }));
+      });
+    });
   },
 
   create(key, value) {
-    const PREFIX = key.toUpperCase(); // TESTS, RECIPES
-    this.rootRef
-      .child(key)
-      .push()
-      .set(value, (err) => {
-        if (err) {
-          this.subject$.error({
-            type: `${PREFIX}_NOT_ADDED`,
-            payload: {
-              value,
-              error: err,
-            }
-          });
-        } else {
-          this.subject$.next({
-            type: `${PREFIX}_ADDED`,
-            payload: {
-              value,
-            }
-          });
-        }
-      });
+    const PREFIX = key.toUpperCase();
+
+    return Observable.create(observer => {
+      this.rootRef
+        .child(key)
+        .push()
+        .set(value, (err) => {
+          if (err) {
+            observer.error({
+              type: `CREATE_FAILED_IN_${PREFIX}`,
+              payload: {
+                originalPayload: value,
+                error: err,
+              }
+            });
+          } else {
+            observer.next({
+              type: `CREATED_IN_${PREFIX}`,
+              payload: value
+            });
+          }
+        });
+    });
   },
 
   update(key, value) {
-    const PREFIX = key.toUpperCase(); // TESTS, RECIPES
-    const { id, name, recipeType, structure, URL } = value;
-    this.rootRef
-      .child(`${key}/${id}`)
-      .update({
-        name,
-        type: recipeType,
-        structure,
-        URL: URL,
-      }, (err) => {
-        if (err) {
-          this.subject$.error({
-            type: `${PREFIX}_NOT_UPDATED`,
-            payload: {
-              value,
-              error: err,
-            }
-          });
-        } else {
-          this.subject$.next({
-            type: `${PREFIX}_UPDATED`,
-            payload: {
-              value,
-            }
-          });
-        }
-      });
+    const PREFIX = key.toUpperCase();
+    const { id, name, type, structure, URL } = value;
+
+    return Observable.create(observer => {
+      this.rootRef
+        .child(`${key}/${id}`)
+        .update({
+          name,
+          type,
+          structure,
+          URL: URL,
+        }, (err) => {
+          if (err) {
+            observer.error({
+              type: `CREATE_FAILED_IN_${PREFIX}`,
+              payload: {
+                originalPayload: value,
+                error: err,
+              }
+            });
+          } else {
+            observer.next({
+              type: `$CREATED_IN_${PREFIX}`,
+              payload: value
+            });
+          }
+        });
+    });
   },
 };

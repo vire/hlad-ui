@@ -10,6 +10,7 @@ const initialState = fromJS({
   currentTest: null,
   recipes: [],
   effects: [],
+  testerActive: false,
 });
 
 // constants
@@ -23,11 +24,21 @@ export const CLICKED_SHOW_ADD_RECIPE = 'CLICKED_SHOW_ADD_RECIPE';
 export const CLICKED_TEST_NEW_RECIPE = 'CLICKED_TEST_NEW_RECIPE';
 
 // firebase triggered
-export const RESOURCE_CREATED = 'RESOURCE_CREATED'; // DEPRECATED
-export const TESTS_ADDED = 'TESTS_ADDED';
-export const RECIPES_ADDED = 'RECIPES_ADDED';
-export const RECEIVED_RECIPES = 'RECEIVED_RECIPES';
-export const RECEIVED_TESTS = 'RECEIVED_TESTS';
+export const RECEIVED_FROM_TESTS = 'RECEIVED_FROM_TESTS';
+export const CREATED_IN_TESTS = 'CREATED_IN_TESTS';
+export const CREATE_FAILED_IN_TESTS = 'CREATE_FAILED_IN_TESTS';
+export const UPDATED_IN_TESTS = 'UPDATED_IN_TESTS';
+export const UPDATE_FAILED_IN_TESTS = 'UPDATE_FAILED_IN_TESTS';
+
+export const RECEIVED_FROM_TEST_RESULTS = 'RECEIVED_FROM_TEST_RESULTS';
+
+export const RECEIVED_FROM_RECIPE_TESTER = 'RECEIVED_FROM_RECIPE_TESTER';
+
+export const RECEIVED_FROM_RECIPES = 'RECEIVED_FROM_RECIPES';
+export const CREATED_IN_RECIPES = 'CREATED_IN_RECIPES';
+export const CREATE_FAILED_IN_RECIPES = 'CREATE_FAILED_IN_RECIPES';
+export const UPDATED_IN_RECIPES = 'UPDATED_IN_RECIPES';
+export const UPDATE_FAILED_IN_RECIPES = 'UPDATE_FAILED_IN_RECIPES';
 
 // actions
 export const showEditForm = payload => ({ type: CLICKED_SHOW_EDIT_RECIPE, payload });
@@ -49,7 +60,7 @@ const reducer = (state = initialState, {type, payload}) => {
     return state.update('effects', updater => updater.push(Effects.FirebaseStartEffect));
   }
 
-  if (type === RECEIVED_RECIPES) {
+  if (type === RECEIVED_FROM_RECIPES) {
     const recipes = ImmutableMap(payload).map((val, key) => {
       return fromJS(Object.assign({}, val, {ID: key}));
     });
@@ -87,45 +98,54 @@ const reducer = (state = initialState, {type, payload}) => {
       .set('currentTest', null);
   }
 
-  if (type === RECIPES_ADDED) {
+  if (type === CREATED_IN_RECIPES) {
     const { UUID } = payload;
     const stateUUID = state.get('pendingRecipeIDs').find((val, key) => val === UUID);
 
     if (stateUUID) {
-      //
-      state
+      return state
         .set('pendingTestID', null)
-        .set('displayNewForm', false)
         .set('currentTest', null)
         .set('displayNewForm', false)
         .update('pendingRecipeIDs', updater => updater.filterNot((val, key) => val === stateUUID));
     }
+
     return state;
   }
 
   if (type === CLICKED_TEST_NEW_RECIPE) {
-    const pendingTestID = state.set('pendingTestID', uuid.v1()).get('pendingTestID');
+    const pendingTestID = uuid.v1();
 
     const effect = Effects.CreateResourceEffect
       .data('tests', Object.assign({}, payload, { pendingTestID }));
 
     return state
+      .set('pendingTestID', pendingTestID)
       .set('currentTest', fromJS(payload))
       .update('effects', updater => updater.push(effect));
   }
 
-  if (type === RECEIVED_TESTS) {
-    const currentTest = ImmutableMap(payload)
-      .filter((val, key) => val['pendingTestID'] === state.get('pendingTestID')).first();
+  if (type === RECEIVED_FROM_TEST_RESULTS) {
+    const currentTestResult: any = ImmutableMap(payload)
+      .toArray()
+      .filter((val: any) => state.get('pendingTestID') === val.pendingTestID)[0];
 
-    if (currentTest) {
-      // set test result to the current test
+    if (currentTestResult) {
       return state
-        .get('pendingTestID', null)
-        .set('currentTest', currentTest);
+        .set('pendingTestID', null)
+        .setIn(['currentTest', 'result'], currentTestResult.result);
     }
+
     return state;
   }
+
+  if (type === RECEIVED_FROM_RECIPE_TESTER) {
+
+    return state
+      .set('testerActive', payload.active);
+  }
+
+  console.warn('Unhandled action', type);
 
   return state;
 };

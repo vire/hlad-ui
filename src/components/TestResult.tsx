@@ -1,8 +1,7 @@
 import * as React from 'react';
 
 abstract class TestResultProps {
-  tested: boolean; // passed failed
-  lunch: any; // result lunch
+  result: any;
 }
 
 export default class TestResult extends React.Component<TestResultProps, {}> {
@@ -21,21 +20,17 @@ export default class TestResult extends React.Component<TestResultProps, {}> {
     const lunchResult = (
       <div className="item">
         <div className="ui info message">
-          <code>{JSON.stringify(this.props.lunch)}</code>
+          <code>{JSON.stringify(this.props.result)}</code>
         </div>
       </div>
     );
 
     return (
       <div className="ui list">
-        { this.props.tested
-            ? null
-            : pendingMessage
-        }
         {
-          this.props.lunch
+          this.props.result
             ? lunchResult
-            : null
+            : pendingMessage
         }
       </div>
     );

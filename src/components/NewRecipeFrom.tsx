@@ -12,24 +12,28 @@ abstract class NewRecipeFromState {
   structureError: Error;
 }
 
-abstract class NewRecipeFromProps {
+interface INewRecipeFromProps {
   onCancel: any;
   onSave: any;
   onTest: any;
+  name?: string;
   currentTest: any;
+  structure?: any;
+  URL?: string;
+  type?: string;
 }
 
-export default class NewRecipeFrom extends React.Component<NewRecipeFromProps , NewRecipeFromState> {
+export default class NewRecipeFrom extends React.Component<INewRecipeFromProps, NewRecipeFromState> {
 
   constructor(props) {
     super(props);
     this.state = {
-      name: '',
-      URL: '',
-      recipeType: 'standard',
-      structureText: '',
+      name: props.name || '',
+      URL: props.URL || '',
+      recipeType: props.type || 'standard',
+      structureText: jsyaml.safeDump(props.structure) || '',
+      structure: props.structure || null,
       structureError: null,
-      structure: null,
     };
   }
 
@@ -137,10 +141,6 @@ export default class NewRecipeFrom extends React.Component<NewRecipeFromProps , 
               </select>
             </div>
             <div className={classNames('field', {error: !!this.state.structureError})}>
-              <button className="ui labeled icon button">
-                <i className="add square icon"></i>
-                Add
-              </button>
               <label>Text</label>
               <textarea
                 onBlur={this.handleBlur.bind(this)}
@@ -160,7 +160,7 @@ export default class NewRecipeFrom extends React.Component<NewRecipeFromProps , 
               this.props.currentTest
                 ? (
                     <div className="field">
-                      <TestResult {...this.props.currentTest}/>
+                      <TestResult {...this.props.currentTest.toJS()}/>
                     </div>
                   )
                 : null
