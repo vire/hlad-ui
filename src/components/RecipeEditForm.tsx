@@ -3,7 +3,7 @@ import * as jsyaml from 'js-yaml';
 import classNames from 'classnames';
 import TestResult from './TestResult';
 
-abstract class NewRecipeFromState {
+abstract class RecipeEditFormState {
   name: string;
   URL: string;
   recipeType: string;
@@ -12,7 +12,7 @@ abstract class NewRecipeFromState {
   structureError: Error;
 }
 
-interface INewRecipeFromProps {
+interface IRecipeEditFormProps {
   onCancel: any;
   onSave: any;
   onTest: any;
@@ -23,7 +23,7 @@ interface INewRecipeFromProps {
   type?: string;
 }
 
-export default class NewRecipeFrom extends React.Component<INewRecipeFromProps, NewRecipeFromState> {
+export default class RecipeEditForm extends React.Component<IRecipeEditFormProps, RecipeEditFormState> {
 
   constructor(props) {
     super(props);

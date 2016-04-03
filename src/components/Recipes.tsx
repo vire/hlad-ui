@@ -4,7 +4,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import Recipe from './Recipe';
-import NewRecipeFrom from './NewRecipeFrom';
+import RecipeEditForm from './RecipeEditForm';
 import * as Actions from '../redux/rootReducer';
 
 interface RecipesProps {
@@ -87,7 +87,7 @@ export class Recipes extends React.Component<RecipesProps, {}> {
       <div>
         {
           this.props.displayNewForm
-            ? <NewRecipeFrom
+            ? <RecipeEditForm
                  currentTest={this.props.currentTest}
                  onSave={this.handleSaveNew.bind(this)}
                  onTest={this.handleTestNew.bind(this)}

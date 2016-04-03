@@ -83,7 +83,11 @@ const reducer = (state = initialState, {type, payload}) => {
   }
 
   if (type === CLICKED_CANCEL_RECIPE) {
-    return state.updateIn(['recipes', payload], recipe => recipe.set('editing', !recipe.get('editing')));
+    return state
+      .updateIn(['recipes', payload], recipe => recipe.set('editing', !recipe.get('editing')))
+      .set('pendingTestID', null)
+      .set('displayNewForm', false)
+      .set('currentTest', null);
   }
 
   if (type === CLICKED_SHOW_ADD_RECIPE) {

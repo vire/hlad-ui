@@ -1,6 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import NewRecipeFrom from './NewRecipeFrom';
+import RecipeEditForm from './RecipeEditForm';
 
 const style = require('./style.css');
 
@@ -53,7 +53,7 @@ export default class Recipe extends React.Component<IRecipeProps, {}> {
   render() {
     if ( this.props.editing) {
       return (
-        <NewRecipeFrom
+        <RecipeEditForm
           onSave={this.handleSave.bind(this)}
           onCancel={this.handleCancel.bind(this)}
           onTest={this.props.onTest}
