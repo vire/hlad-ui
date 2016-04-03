@@ -2,12 +2,24 @@ import { fromJS, Map as ImmutableMap } from 'immutable';
 import { decorateReducer } from './utils';
 import * as Effects from './effects';
 import uuid from 'node-uuid';
+import { RecipeModel } from '../models/recipe';
+import { Effect } from './effects';
 
-const initialState = fromJS({
+interface State extends Immutable.Map<string, any> {
+  pendingRecipeIDs: Array<string>;
+  displayNewForm: boolean;
+  pendingTestID: string;
+  currentTest: any;
+  recipes: Array<RecipeModel>;
+  effects: Array<Effect>;
+  testerActive: boolean;
+}
+
+const initialState: State = fromJS({
   pendingRecipeIDs: [],
   displayNewForm: false,
-  pendingTestID: null,
-  currentTest: null,
+  pendingTestID: undefined,
+  currentTest: undefined,
   recipes: [],
   effects: [],
   testerActive: false,

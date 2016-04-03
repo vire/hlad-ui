@@ -1,13 +1,13 @@
 import { Observable } from 'rxjs';
 
-interface IFirebaseService {
+export interface FirebaseService {
   rootRef?: Firebase;
   init: any;
   create(key: string, value: any): Observable<{}>;
   update(key: string, value: any): Observable<{}>;
 }
 
-export const FirebaseService: IFirebaseService  = {
+export const FirebaseService: FirebaseService  = {
   rootRef: null,
 
   init(rootRef: Firebase, keys: Array<string>) {

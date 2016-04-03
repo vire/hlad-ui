@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-interface ITestResultProps {
+interface TestResultProps {
   result: any;
 }
 
-export default class TestResult extends React.Component<ITestResultProps, {}> {
+export default class TestResult extends React.Component<TestResultProps, {}> {
   render() {
     const pendingMessage = (
       <div className="item">

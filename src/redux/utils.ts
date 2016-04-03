@@ -1,4 +1,4 @@
-import { fromJS, List, Map as ImmutableMap } from 'immutable';
+import { List, Map as ImmutableMap } from 'immutable';
 
 const ACTION_EXECUTED = 'ACTION_EXECUTED';
 const sideEffects = [];

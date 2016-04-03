@@ -2,42 +2,22 @@ import * as React from 'react';
 import * as jsyaml from 'js-yaml';
 import classNames from 'classnames';
 import RecipeEditForm from './RecipeEditForm';
-
+import { RecipeModel } from '../models/recipe';
+import { TestModel } from '../models/test';
 const style = require('./style.css');
 
-interface IRecipeStructure {
-  main?: any;
-  side?: any;
-}
-
-interface ITestModel {
-  name: string;
-  URL: string;
-  type: string;
-  structure: IRecipeStructure;
-  result?: any;
-}
-
-interface IRecipeModel {
-  structure?: IRecipeStructure;
-  URL: string;
-  name: string;
-  type: string;
-  ID: string;
-}
-
-interface IRecipeProps extends IRecipeModel {
+interface RecipeProps extends RecipeModel {
   editing: boolean;
   onEdit(ID: string): void;
   onCancel(ID: string): void;
   onSave(recipe: any): void;
-  onTest(test: ITestModel): any;
-  currentTest: ITestModel;
+  onTest(test: TestModel): any;
+  currentTest: TestModel;
 }
 
 const formatURL = URL => URL.split(':')[1].slice(2);
 
-export default class Recipe extends React.Component<IRecipeProps, {}> {
+export default class Recipe extends React.Component<RecipeProps, {}> {
 
   handleClick() {
     this.props.onEdit(this.props.ID);

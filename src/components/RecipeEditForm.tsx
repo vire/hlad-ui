@@ -12,7 +12,7 @@ abstract class RecipeEditFormState {
   structureError: Error;
 }
 
-interface IRecipeEditFormProps {
+interface RecipeEditFormProps {
   onCancel: any;
   onSave: any;
   onTest: any;
@@ -23,7 +23,7 @@ interface IRecipeEditFormProps {
   type?: string;
 }
 
-export default class RecipeEditForm extends React.Component<IRecipeEditFormProps, RecipeEditFormState> {
+export default class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditFormState> {
 
   constructor(props) {
     super(props);

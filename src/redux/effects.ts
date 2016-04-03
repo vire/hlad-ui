@@ -1,19 +1,24 @@
 import Firebase from 'firebase';
 import { FirebaseService } from '../services/firebase';
 
-abstract class IStreamPayload {
+interface NextValue {
   type: string;
   payload: any;
 }
 
-abstract class IErrorPayload {
+interface ErrorPayload {
   originalPayload: any;
   error: Error;
 }
 
-abstract class IStreamErrorPayload {
+interface ErrorValue {
   type: string;
-  payload: IErrorPayload;
+  payload: ErrorPayload;
+}
+
+export interface Effect {
+  data(key: string, value: any): Effect;
+  execute(dispatch: any): void;
 }
 
 // the FirebaseService instance will get Injected into the effect
@@ -23,13 +28,13 @@ export const FirebaseStartEffect = {
     const stream$ = FirebaseService.init(firebaseRef, ['recipes', 'tests', 'test_results', 'recipe_tester']);
 
     stream$.subscribe(
-      ({type, payload}: IStreamPayload) => dispatch({type, payload}),
-      ({type, payload}: IStreamErrorPayload) => dispatch({type, payload})
+      ({type, payload}: NextValue) => dispatch({type, payload}),
+      ({type, payload}: ErrorValue) => dispatch({type, payload})
     );
   }
 };
 
-export const UpdateResourceEffect = {
+export const UpdateResourceEffect: Effect = {
   data(key, value) {
     this.key = key;
     this.value = value;
@@ -45,7 +50,7 @@ export const UpdateResourceEffect = {
   }
 };
 
-export const CreateResourceEffect = {
+export const CreateResourceEffect: Effect = {
   data(key, value) {
     this.key = key;
     this.value = value;
