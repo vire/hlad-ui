@@ -4,11 +4,12 @@ UI for configuring/debugging the [hlad-crawler](https://github.com/vire/hlad) us
     
 ## WIP
 
-- [x] Connect w/ Firebase + read initial data model
-- [] Listen to changes from Firebase (resolve conflicts)
-- [] Push changes to Firebase
-- [] LiveRecipe editor - paste configuration and see results
+- [x] Listen for `Recipes` and `Recipe Tests` from Firebase
+- [x] Push `Recipes` to Firebase
+- [x] Connect w/ [RecipeTester](https://github.com/vire/hlad/blob/master/recipe-tester.js) - define structure, evaluate, make request, see results
+- [x] Notification about **RecipeTester** offline/online
 - [] Hlad remote configuration - endpoint, crawl time
+- [] Hlad simulate sending content to endpoint (will send to firebase and display in hlad-ui)
 - [] Tests + CI
 
 ## Setup

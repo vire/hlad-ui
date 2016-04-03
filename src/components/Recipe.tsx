@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as jsyaml from 'js-yaml';
 import classNames from 'classnames';
 import RecipeEditForm from './RecipeEditForm';
 
@@ -50,6 +51,18 @@ export default class Recipe extends React.Component<IRecipeProps, {}> {
     this.props.onCancel(this.props.ID);
   }
 
+  getStructureString(structure) {
+    let structureString = '';
+    try {
+      structureString = jsyaml.safeDump(structure);
+    } catch (parseError) {
+      // TODO display some message about broken structure
+      console.error(`YAML Parsing failed: ${parseError.message}`);
+    }
+
+    return structureString;
+  }
+
   render() {
     if ( this.props.editing) {
       return (
@@ -85,7 +98,7 @@ export default class Recipe extends React.Component<IRecipeProps, {}> {
             ? (
                 <div className="item">
                   <div className="ui info message">
-                    <code>{JSON.stringify(this.props.structure)}</code>
+                    <code className={style.structure}>{this.getStructureString(this.props.structure)}</code>
                   </div>
                 </div>
               )
