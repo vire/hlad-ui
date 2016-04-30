@@ -1,11 +1,12 @@
 import { fromJS, Map as ImmutableMap } from 'immutable';
 import { decorateReducer } from './utils';
-import * as Effects from './effects';
-import uuid from 'node-uuid';
 import { RecipeModel } from '../models/recipe';
 import { Effect } from './effects';
+import * as FirebaseReducer from './firebaseReducer';
+import * as RecipesReducer from './recipesReducer';
+import { rootMounted } from './appReducer';
 
-interface State extends Immutable.Map<string, any> {
+interface State extends ImmutableMap<string, any> {
   pendingRecipeIDs: Array<string>;
   displayNewForm: boolean;
   pendingTestID: string;
@@ -63,107 +64,38 @@ export const testNewRecipe = payload => ({ type: CLICKED_TEST_NEW_RECIPE, payloa
 
 const reducer = (state = initialState, {type, payload}) => {
   console.log('handling action:' + type, payload);
+  
+  switch (type) {
+    case ROOT_MOUNTED:
+      return rootMounted(state);
+    case CREATED_IN_RECIPES:
+      return FirebaseReducer.createdInRecipes(state, payload);
+    case RECEIVED_FROM_RECIPES:
+      return FirebaseReducer.receivedFromRecipes(state, payload);
+    case RECEIVED_FROM_RECIPE_TESTER:
+      return FirebaseReducer.receivedFromRecipeTester(state, payload);
+    case RECEIVED_FROM_TEST_RESULTS:
+      return FirebaseReducer.receivedFromTestResults(state, payload);
 
-  if (type === CLICKED_SHOW_EDIT_RECIPE) {
-    return state.updateIn(['recipes', payload], recipe => recipe.set('editing', !recipe.get('editing')));
+    case CLICKED_SHOW_ADD_RECIPE:
+      return RecipesReducer.clickedShowAdd(state);
+    case CLICKED_TEST_NEW_RECIPE:
+      return RecipesReducer.clickedTestNew(state, payload);
+    case CLICKED_CANCEL_NEW_RECIPE:
+      return RecipesReducer.clickedCancelNew(state);
+    case CLICKED_SAVE_RECIPE:
+      return RecipesReducer.clickedSave(state, payload);
+
+    case CLICKED_SHOW_EDIT_RECIPE:
+      return RecipesReducer.clickedShowEdit(state, payload);
+    case CLICKED_UPDATE_RECIPE:
+      return RecipesReducer.clickedUpdate(state, payload);
+    case CLICKED_CANCEL_RECIPE:
+      return RecipesReducer.clickedCancel(state, payload);
+    default:
+      console.warn('Unhandled action', type);
+      return state;
   }
-
-  if (type === ROOT_MOUNTED) {
-    return state.update('effects', updater => updater.push(Effects.FirebaseStartEffect));
-  }
-
-  if (type === RECEIVED_FROM_RECIPES) {
-    const recipes = ImmutableMap(payload).map((val, key) => {
-      return fromJS(Object.assign({}, val, {ID: key}));
-    });
-    return state.set('recipes', recipes);
-  }
-
-  if (type === CLICKED_SAVE_RECIPE) {
-    const UUID = uuid.v1();
-    const effect = Effects.CreateResourceEffect.data('recipes', Object.assign({}, payload, { UUID }));
-
-    return state
-      .update('pendingRecipeIDs', updater => updater.push(UUID))
-      .update('effects', updater => updater.push(effect));
-  }
-
-  if (type === CLICKED_UPDATE_RECIPE) {
-    const effect = Effects.UpdateResourceEffect
-      .data('recipes', payload);
-    return state.update('effects', updater => updater.push(effect));
-  }
-
-  if (type === CLICKED_CANCEL_RECIPE) {
-    return state
-      .updateIn(['recipes', payload], recipe => recipe.set('editing', !recipe.get('editing')))
-      .set('pendingTestID', null)
-      .set('displayNewForm', false)
-      .set('currentTest', null);
-  }
-
-  if (type === CLICKED_SHOW_ADD_RECIPE) {
-    return state
-      .set('displayNewForm', true);
-  }
-
-  if (type === CLICKED_CANCEL_NEW_RECIPE) {
-    return state
-      .set('pendingTestID', null)
-      .set('displayNewForm', false)
-      .set('currentTest', null);
-  }
-
-  if (type === CREATED_IN_RECIPES) {
-    const { UUID } = payload;
-    const stateUUID = state.get('pendingRecipeIDs').find((val, key) => val === UUID);
-
-    if (stateUUID) {
-      return state
-        .set('pendingTestID', null)
-        .set('currentTest', null)
-        .set('displayNewForm', false)
-        .update('pendingRecipeIDs', updater => updater.filterNot((val, key) => val === stateUUID));
-    }
-
-    return state;
-  }
-
-  if (type === CLICKED_TEST_NEW_RECIPE) {
-    const pendingTestID = uuid.v1();
-
-    const effect = Effects.CreateResourceEffect
-      .data('tests', Object.assign({}, payload, { pendingTestID }));
-
-    return state
-      .set('pendingTestID', pendingTestID)
-      .set('currentTest', fromJS(payload))
-      .update('effects', updater => updater.push(effect));
-  }
-
-  if (type === RECEIVED_FROM_TEST_RESULTS) {
-    const currentTestResult: any = ImmutableMap(payload)
-      .toArray()
-      .filter((val: any) => state.get('pendingTestID') === val.pendingTestID)[0];
-
-    if (currentTestResult) {
-      return state
-        .set('pendingTestID', null)
-        .setIn(['currentTest', 'result'], currentTestResult.result);
-    }
-
-    return state;
-  }
-
-  if (type === RECEIVED_FROM_RECIPE_TESTER) {
-
-    return state
-      .set('testerActive', payload.active);
-  }
-
-  console.warn('Unhandled action', type);
-
-  return state;
 };
 
 export default decorateReducer(reducer)
