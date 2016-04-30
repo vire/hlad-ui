@@ -64,7 +64,7 @@ export const testNewRecipe = payload => ({ type: CLICKED_TEST_NEW_RECIPE, payloa
 
 const reducer = (state = initialState, {type, payload}) => {
   console.log('handling action:' + type, payload);
-  
+
   switch (type) {
     case ROOT_MOUNTED:
       return rootMounted(state);
