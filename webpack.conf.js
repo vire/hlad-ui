@@ -14,7 +14,6 @@ const webpackConfig = {
     path: path.join(__dirname, './dist'),
     filename: 'bundle.js'
   },
-
   module: {
     loaders: [
       {
@@ -49,10 +48,6 @@ const webpackConfig = {
         loader: 'babel-loader'
       }
     ]
-  },
-  tslint: {
-    emitErrors: false,
-    formattersDirectory: path.resolve(__dirname, './node_modules/tslint-loader/formatters/')
   },
   plugins: [
     new webpack.DefinePlugin({

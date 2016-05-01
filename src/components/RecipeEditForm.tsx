@@ -27,11 +27,14 @@ export default class RecipeEditForm extends React.Component<RecipeEditFormProps,
 
   constructor(props) {
     super(props);
+
+    const structureText = props.structure ? jsyaml.safeDump(props.structure) : '';
+
     this.state = {
       name: props.name || '',
       URL: props.URL || '',
       recipeType: props.type || 'standard',
-      structureText: jsyaml.safeDump(props.structure) || '',
+      structureText,
       structure: props.structure || null,
       structureError: null,
     };

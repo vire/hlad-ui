@@ -74,17 +74,15 @@ export class Recipes extends React.Component<RecipesProps, {}> {
       'large label'
     );
 
-    const content = (
-      <div>
-        <button className="ui secondary button"
-                onClick={this.handleAddNew.bind(this)}>Add</button>
-        <div className={testerClass}>recipe tester</div>
-        { recipes }
-      </div>
-    );
-
     return (
       <div>
+        {
+          !this.props.displayNewForm
+            ? (<button className="ui secondary button"
+                       onClick={this.handleAddNew.bind(this)}>Add</button>)
+            : null
+        }
+        <div className={testerClass}>recipe tester</div>
         {
           this.props.displayNewForm
             ? <RecipeEditForm
@@ -92,7 +90,7 @@ export class Recipes extends React.Component<RecipesProps, {}> {
                  onSave={this.handleSaveNew.bind(this)}
                  onTest={this.handleTestNew.bind(this)}
                  onCancel={this.handleCancelNew.bind(this)}/>
-            : content
+            : recipes
         }
       </div>
     );
