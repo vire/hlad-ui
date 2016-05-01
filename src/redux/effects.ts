@@ -25,7 +25,7 @@ export interface Effect {
 export const FirebaseStartEffect = {
   execute({ dispatch }) {
     const firebaseRef = new Firebase(`https://${__FIREBASE_ID}.firebaseio.com`);
-    const stream$ = FirebaseService.init(firebaseRef, ['recipes', 'tests', 'test_results', 'recipe_tester']);
+    const stream$ = FirebaseService.init(firebaseRef, ['recipes', 'tests', 'test_results', 'agent']);
 
     stream$.subscribe(
       ({type, payload}: NextValue) => dispatch({type, payload}),

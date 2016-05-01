@@ -34,4 +34,4 @@ export const receivedFromRecipes = (state, payload) => {
   return state.set('recipes', recipes);
 };
 
-export const receivedFromRecipeTester = (state, payload) => state.set('testerActive', payload.active);
+export const receivedFromAgent = (state, payload) => state.set('agentActive', payload.active);

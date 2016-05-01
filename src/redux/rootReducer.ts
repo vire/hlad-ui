@@ -23,7 +23,7 @@ const initialState: State = fromJS({
   currentTest: undefined,
   recipes: [],
   effects: [],
-  testerActive: false,
+  agentActive: false,
 });
 
 // constants
@@ -45,7 +45,7 @@ export const UPDATE_FAILED_IN_TESTS = 'UPDATE_FAILED_IN_TESTS';
 
 export const RECEIVED_FROM_TEST_RESULTS = 'RECEIVED_FROM_TEST_RESULTS';
 
-export const RECEIVED_FROM_RECIPE_TESTER = 'RECEIVED_FROM_RECIPE_TESTER';
+export const RECEIVED_FROM_AGENT = 'RECEIVED_FROM_AGENT';
 
 export const RECEIVED_FROM_RECIPES = 'RECEIVED_FROM_RECIPES';
 export const CREATED_IN_RECIPES = 'CREATED_IN_RECIPES';
@@ -72,8 +72,8 @@ const reducer = (state = initialState, {type, payload}) => {
       return FirebaseReducer.createdInRecipes(state, payload);
     case RECEIVED_FROM_RECIPES:
       return FirebaseReducer.receivedFromRecipes(state, payload);
-    case RECEIVED_FROM_RECIPE_TESTER:
-      return FirebaseReducer.receivedFromRecipeTester(state, payload);
+    case RECEIVED_FROM_AGENT:
+      return FirebaseReducer.receivedFromAgent(state, payload);
     case RECEIVED_FROM_TEST_RESULTS:
       return FirebaseReducer.receivedFromTestResults(state, payload);
 

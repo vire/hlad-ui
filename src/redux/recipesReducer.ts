@@ -34,7 +34,7 @@ export const clickedTestNew = (state, payload) => {
   const pendingTestID = uuid.v1();
 
   const effect = Effects.CreateResourceEffect
-    .data('tests', Object.assign({}, payload, { pendingTestID }));
+    .data('test_jobs', Object.assign({}, payload, { pendingTestID }));
 
   return state
     .set('pendingTestID', pendingTestID)

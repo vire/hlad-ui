@@ -12,14 +12,14 @@ interface RecipesProps {
   recipes: Immutable.Iterable<any, any>;
   displayNewForm: boolean;
   currentTest: any;
-  testerActive: boolean;
+  agentActive: boolean;
 }
 
 const mapStateToProps = state => ({
   displayNewForm: state.get('displayNewForm'),
   recipes: state.get('recipes'),
   currentTest: state.get('currentTest'),
-  testerActive: state.get('testerActive'),
+  agentActive: state.get('agentActive'),
 });
 
 export class Recipes extends React.Component<RecipesProps, {}> {
@@ -68,8 +68,8 @@ export class Recipes extends React.Component<RecipesProps, {}> {
     const testerClass = classNames(
       'ui',
       {
-        'green': this.props.testerActive,
-        'red': !this.props.testerActive
+        'green': this.props.agentActive,
+        'red': !this.props.agentActive
       },
       'large label'
     );
@@ -82,7 +82,7 @@ export class Recipes extends React.Component<RecipesProps, {}> {
                        onClick={this.handleAddNew.bind(this)}>Add</button>)
             : null
         }
-        <div className={testerClass}>recipe tester</div>
+        <div className={testerClass}>agent</div>
         {
           this.props.displayNewForm
             ? <RecipeEditForm
