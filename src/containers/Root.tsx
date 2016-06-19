@@ -8,7 +8,7 @@ const initAction = () => {
   };
 };
 
-export class Root extends React.Component<any, void> {
+export class Root extends React.Component<any, any> {
 
   componentWillMount() {
     this.props.dispatch(initAction());

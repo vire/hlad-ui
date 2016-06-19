@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as chai from  'chai';
 import * as TestUtils from 'react-addons-test-utils';
 import { Root } from '../src/containers/Root';
 const expect = chai.expect;

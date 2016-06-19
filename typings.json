@@ -1,22 +1,20 @@
 {
   "name": "hlad-ui",
-  "ambientDependencies": {
-    "chai": "github:DefinitelyTyped/DefinitelyTyped/chai/chai.d.ts#1914a00b3c740348dae407ee0d2be89b0b58ad7f",
-    "classnames": "github:DefinitelyTyped/DefinitelyTyped/classnames/classnames.d.ts#8287192198a14bcb31533afe381aa24ac7eed4c6",
-    "firebase": "github:DefinitelyTyped/DefinitelyTyped/firebase/firebase.d.ts#8d7a58e59ce1f8497d0f45ddecf4132751a41848",
-    "js-yaml": "github:DefinitelyTyped/DefinitelyTyped/js-yaml/js-yaml.d.ts#14fe4313f4a1cf69add3505a2ab1dbc690dc2116",
-    "mocha": "github:DefinitelyTyped/DefinitelyTyped/mocha/mocha.d.ts#d6dd320291705694ba8e1a79497a908e9f5e6617",
-    "node": "github:DefinitelyTyped/DefinitelyTyped/node/node.d.ts#20e1eb9616922d382d918cc5a21870a9dbe255f5",
-    "react": "github:DefinitelyTyped/DefinitelyTyped/react/react.d.ts#f407264835650f5f38d4bb2c515a79e7a835916b",
-    "react-addons-test-utils": "github:DefinitelyTyped/DefinitelyTyped/react/react-addons-test-utils.d.ts#ca5bfe76d2d9bf6852cbc712d9f3e0047c93486e",
-    "react-dom": "github:DefinitelyTyped/DefinitelyTyped/react/react-dom.d.ts#ca5bfe76d2d9bf6852cbc712d9f3e0047c93486e",
-    "sinon": "github:DefinitelyTyped/DefinitelyTyped/sinon/sinon.d.ts#6e7d83167d86d857817bd492786f8304f5c4a0e4",
-    "sinon-chai": "github:DefinitelyTyped/DefinitelyTyped/sinon-chai/sinon-chai.d.ts#ceedbb35506c4b20867ddb495e8626ea04f38969"
-  },
   "dependencies": {
-    "node-uuid": "github:rapropos/typed-node-uuid#a2ad36f2802416729eaad89559d76e0b03ba673c",
-    "react-redux": "github:andrew-w-ross/typings-react-redux#6be88a57427f8ec220cad13d68565fd5f5711146",
-    "redux": "https://raw.githubusercontent.com/reactjs/redux/master/index.d.ts",
-    "redux-original": "https://raw.githubusercontent.com/reactjs/redux/master/index.d.ts"
+    "chai": "registry:npm/chai#3.5.0+20160415060238",
+    "node-uuid": "registry:npm/node-uuid#1.4.7+20160503013124",
+    "react-redux": "registry:npm/react-redux#4.4.0+20160614222153",
+    "sinon": "registry:npm/sinon#1.16.0+20160427193336",
+    "sinon-chai": "registry:npm/sinon-chai#2.8.0+20160310030142"
+  },
+  "globalDependencies": {
+    "classnames": "registry:dt/classnames#0.0.0+20160316155526",
+    "firebase": "registry:dt/firebase#2.4.1+20160412125105",
+    "js-yaml": "registry:dt/js-yaml#3.5.2+20160316171810",
+    "mocha": "registry:dt/mocha#2.2.5+20160619032855",
+    "node": "registry:dt/node#6.0.0+20160613154055",
+    "react": "registry:dt/react#0.14.0+20160602151522",
+    "react-addons-test-utils": "registry:dt/react-addons-test-utils#0.14.0+20160427035638",
+    "react-dom": "registry:dt/react-dom#0.14.0+20160412154040"
   }
 }

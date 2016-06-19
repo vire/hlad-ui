@@ -22,7 +22,7 @@ const mapStateToProps = state => ({
   agentActive: state.get('agentActive'),
 });
 
-export class Recipes extends React.Component<RecipesProps, {}> {
+export class Recipes extends React.Component<any, {}> {
 
   handleEdit(recipe) {
     this.props.dispatch(Actions.showEditForm(recipe));
