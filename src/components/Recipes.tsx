@@ -52,7 +52,13 @@ export class Recipes extends React.Component<any, {}> {
     this.props.dispatch(Actions.showNewRecipeForm());
   }
 
+  handlePublish() {
+    this.props.dispatch(Actions.publish());
+  }
+
   render() {
+    const { agentActive } = this.props;
+
     const recipes = this.props.recipes.toArray().map(
       (recipe, idx) => (
         <Recipe key={idx}
@@ -68,21 +74,23 @@ export class Recipes extends React.Component<any, {}> {
     const testerClass = classNames(
       'ui',
       {
-        'green': this.props.agentActive,
-        'red': !this.props.agentActive
+        'green': agentActive,
+        'red': !agentActive
       },
       'large label'
     );
 
     return (
       <div>
+        <div className={testerClass}>{agentActive ? 'READY' : 'N/A'}</div>
         {
           !this.props.displayNewForm
             ? (<button className="ui secondary button"
                        onClick={this.handleAddNew.bind(this)}>Add</button>)
             : null
         }
-        <div className={testerClass}>agent</div>
+        <button className="ui secondary button disabled"
+                onClick={this.handlePublish.bind(this)}>Publish</button>
         {
           this.props.displayNewForm
             ? <RecipeEditForm

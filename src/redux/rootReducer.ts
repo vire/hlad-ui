@@ -53,6 +53,8 @@ export const CREATE_FAILED_IN_RECIPES = 'CREATE_FAILED_IN_RECIPES';
 export const UPDATED_IN_RECIPES = 'UPDATED_IN_RECIPES';
 export const UPDATE_FAILED_IN_RECIPES = 'UPDATE_FAILED_IN_RECIPES';
 
+export const CLICKED_PUBLISH = 'CLICKED_PUBLISH';
+
 // actions
 export const showEditForm = payload => ({ type: CLICKED_SHOW_EDIT_RECIPE, payload });
 export const saveRecipe = payload => ({ type: CLICKED_SAVE_RECIPE, payload });
@@ -61,6 +63,7 @@ export const cancelEditForm = payload => ({ type: CLICKED_CANCEL_RECIPE, payload
 export const cancelNewForm = () => ({ type: CLICKED_CANCEL_NEW_RECIPE });
 export const showNewRecipeForm = () => ({ type: CLICKED_SHOW_ADD_RECIPE });
 export const testNewRecipe = payload => ({ type: CLICKED_TEST_NEW_RECIPE, payload });
+export const publish = () => ({ type: CLICKED_PUBLISH });
 
 const reducer = (state = initialState, {type, payload}) => {
   console.log('handling action:' + type, payload);
@@ -98,4 +101,4 @@ const reducer = (state = initialState, {type, payload}) => {
   }
 };
 
-export default decorateReducer(reducer)
+export default decorateReducer(reducer);
