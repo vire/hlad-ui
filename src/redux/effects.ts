@@ -1,17 +1,18 @@
 import Firebase from 'firebase';
+
 import { FirebaseService } from '../services/firebase';
 
-interface NextValue {
+type NextValue = {
   type: string;
   payload: any;
 }
 
-interface ErrorPayload {
+type ErrorPayload = {
   originalPayload: any;
   error: Error;
 }
 
-interface ErrorValue {
+type ErrorValue = {
   type: string;
   payload: ErrorPayload;
 }

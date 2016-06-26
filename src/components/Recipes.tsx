@@ -98,7 +98,7 @@ export class Recipes extends React.Component<RecipesProps, {}> {
                        onClick={this.handleAddNew}>Add</button>)
             : null
         }
-        <button className="ui secondary button disabled"
+        <button className="ui secondary button"
                 onClick={this.handlePublish}>Publish</button>
         {
           displayNewForm

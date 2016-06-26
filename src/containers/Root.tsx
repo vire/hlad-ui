@@ -2,6 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 
 import Recipes from '../components/Recipes';
+import * as Constants from '../constants';
 
 type RootProps = {
   appMounted: any;
@@ -10,7 +11,7 @@ type RootProps = {
 const mapDispatchToProps = (dispatch) => ({
   appMounted() {
     return dispatch({
-      type: 'ROOT_MOUNTED',
+      type: Constants.ROOT_MOUNTED,
     });
   }
 });
