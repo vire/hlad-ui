@@ -1,6 +1,8 @@
 import * as React from 'react';
 import * as jsyaml from 'js-yaml';
 import classNames from 'classnames';
+import { autobind } from 'core-decorators';
+
 import RecipeEditForm from './RecipeEditForm';
 import { RecipeModel } from '../models/recipe';
 import { TestModel } from '../models/test';
@@ -17,16 +19,19 @@ interface RecipeProps extends RecipeModel {
 
 const formatURL = URL => URL.split(':')[1].slice(2);
 
-export default class Recipe extends React.Component<RecipeProps, {}> {
+class Recipe extends React.Component<RecipeProps, {}> {
 
+  @autobind
   handleClick() {
     this.props.onEdit(this.props.ID);
   }
 
+  @autobind
   handleSave(test) {
     this.props.onSave(Object.assign({}, test, { id: this.props.ID }));
   }
 
+  @autobind
   handleCancel() {
     this.props.onCancel(this.props.ID);
   }
@@ -44,16 +49,18 @@ export default class Recipe extends React.Component<RecipeProps, {}> {
   }
 
   render() {
+    const { structure } = this.props;
+
     if ( this.props.editing) {
       return (
         <RecipeEditForm
-          onSave={this.handleSave.bind(this)}
-          onCancel={this.handleCancel.bind(this)}
+          onSave={this.handleSave}
+          onCancel={this.handleCancel}
           onTest={this.props.onTest}
           currentTest={this.props.currentTest}
           name={this.props.name}
           URL={this.props.URL}
-          structure={this.props.structure}
+          structure={structure}
           type={this.props.type}
         />
       );
@@ -68,17 +75,17 @@ export default class Recipe extends React.Component<RecipeProps, {}> {
               <span className={classNames('ui', { blue: this.props.type === 'custom'}, 'small', 'label')}>
                 {this.props.type}
               </span>
-              <i className={classNames([style.edit], 'tiny configure icon')} onClick={this.handleClick.bind(this)}/>
+              <i className={classNames([style.edit], 'tiny configure icon')} onClick={this.handleClick}/>
             </div>
           </div>
           <div className="item">
             <a href={this.props.URL} target="_blank">{formatURL(this.props.URL)}</a>
           </div>
-          { this.props.structure
+          { structure
             ? (
                 <div className="item">
                   <div className="ui info message">
-                    <code className={style.structure}>{this.getStructureString(this.props.structure)}</code>
+                    <code className={style.structure}>{this.getStructureString(structure)}</code>
                   </div>
                 </div>
               )
@@ -89,3 +96,6 @@ export default class Recipe extends React.Component<RecipeProps, {}> {
     );
   }
 }
+
+
+export default Recipe;

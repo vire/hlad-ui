@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-interface TestResultProps {
+type TestResultProps = {
   result: any;
 }
 
-export default class TestResult extends React.Component<TestResultProps, {}> {
+class TestResult extends React.Component<TestResultProps, {}> {
   render() {
     const pendingMessage = (
       <div className="item">
@@ -36,3 +36,5 @@ export default class TestResult extends React.Component<TestResultProps, {}> {
     );
   }
 }
+
+export default TestResult;

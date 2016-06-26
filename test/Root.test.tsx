@@ -1,14 +1,13 @@
 import * as React from 'react';
-import * as chai from  'chai';
 import * as TestUtils from 'react-addons-test-utils';
+import { expect } from 'chai';
+
 import { Root } from '../src/containers/Root';
-const expect = chai.expect;
 
 describe('Root', () => {
   it('should render', () => {
-    const dispatch = action => action; // mimic the IDispatch
     const renderer = TestUtils.createRenderer();
-    renderer.render(<Root dispatch={ dispatch } />);
+    renderer.render(<Root appMounted={() => ({type: 'xxx'})}/>);
     const result = renderer.getRenderOutput();
     expect(result).to.be.ok;
   });

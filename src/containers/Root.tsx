@@ -1,17 +1,24 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+
 import Recipes from '../components/Recipes';
 
-const initAction = () => {
-  return {
-    type: 'ROOT_MOUNTED',
-  };
-};
+type RootProps = {
+  appMounted: any;
+}
 
-export class Root extends React.Component<any, any> {
+const mapDispatchToProps = (dispatch) => ({
+  appMounted() {
+    return dispatch({
+      type: 'ROOT_MOUNTED',
+    });
+  }
+});
 
-  componentWillMount() {
-    this.props.dispatch(initAction());
+export class Root extends React.Component<RootProps, any> {
+
+  componentDidMount() {
+    this.props.appMounted();
   }
 
   render() {
@@ -23,4 +30,4 @@ export class Root extends React.Component<any, any> {
   }
 }
 
-export default connect()(Root);
+export default connect(undefined, mapDispatchToProps)(Root as any);

@@ -1,9 +1,11 @@
 import * as React from 'react';
 import * as jsyaml from 'js-yaml';
 import classNames from 'classnames';
+import { autobind } from 'core-decorators';
+
 import TestResult from './TestResult';
 
-abstract class RecipeEditFormState {
+type RecipeEditFormState = {
   name: string;
   URL: string;
   recipeType: string;
@@ -12,7 +14,7 @@ abstract class RecipeEditFormState {
   structureError: Error;
 }
 
-interface RecipeEditFormProps {
+type RecipeEditFormProps = {
   onCancel: any;
   onSave: any;
   onTest: any;
@@ -23,7 +25,7 @@ interface RecipeEditFormProps {
   type?: string;
 }
 
-export default class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditFormState> {
+class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditFormState> {
 
   constructor(props) {
     super(props);
@@ -40,6 +42,7 @@ export default class RecipeEditForm extends React.Component<RecipeEditFormProps,
     };
   }
 
+  @autobind
   handleChangeName(event) {
     const newState = Object.assign({}, this.state, {
       name: event.target.value,
@@ -48,6 +51,7 @@ export default class RecipeEditForm extends React.Component<RecipeEditFormProps,
     this.setState(newState);
   }
 
+  @autobind
   handleChangeURL(event) {
     const newState = Object.assign({}, this.state, {
       URL: event.target.value,
@@ -56,6 +60,7 @@ export default class RecipeEditForm extends React.Component<RecipeEditFormProps,
     this.setState(newState);
   }
 
+  @autobind
   handleChangeType(event) {
     const newState = Object.assign({}, this.state, {
       recipeType: event.target.value,
@@ -64,6 +69,7 @@ export default class RecipeEditForm extends React.Component<RecipeEditFormProps,
     this.setState(newState);
   }
 
+  @autobind
   handleChangeStructure(event) {
     const newState = Object.assign({}, this.state, {
       structureText: event.target.value,
@@ -72,10 +78,12 @@ export default class RecipeEditForm extends React.Component<RecipeEditFormProps,
     this.setState(newState);
   }
 
+  @autobind
   handleClickDiscard() {
     this.props.onCancel();
   }
 
+  @autobind
   handleClickSave() {
     // validate structure - JSON.parse, show error message
     const { name, URL, recipeType, structure } = this.state;
@@ -94,6 +102,7 @@ export default class RecipeEditForm extends React.Component<RecipeEditFormProps,
     }
   }
 
+  @autobind
   handleClickTest() {
     const { name, URL, recipeType, structure } = this.state;
 
@@ -105,6 +114,7 @@ export default class RecipeEditForm extends React.Component<RecipeEditFormProps,
       });
   }
 
+  @autobind
   handleBlur(event) {
     let structure = null;
     let structureError = null;
@@ -130,15 +140,15 @@ export default class RecipeEditForm extends React.Component<RecipeEditFormProps,
           <div className={classNames('ui form', { error: !!this.state.structureError})}>
             <div className="field">
               <label>Name</label>
-              <input type="text" onChange={this.handleChangeName.bind(this)} value={this.state.name}/>
+              <input type="text" onChange={this.handleChangeName} value={this.state.name}/>
             </div>
             <div className="field">
               <label>URL</label>
-              <input type="text" onChange={this.handleChangeURL.bind(this)} value={this.state.URL}/>
+              <input type="text" onChange={this.handleChangeURL} value={this.state.URL}/>
             </div>
             <div className="field">
               <label>Type</label>
-              <select className="ui dropdown" onChange={this.handleChangeType.bind(this)} value={this.state.recipeType}>
+              <select className="ui dropdown" onChange={this.handleChangeType} value={this.state.recipeType}>
                 <option value="standard">Standard</option>
                 <option value="custom">Custom</option>
               </select>
@@ -146,8 +156,8 @@ export default class RecipeEditForm extends React.Component<RecipeEditFormProps,
             <div className={classNames('field', {error: !!this.state.structureError})}>
               <label>Text</label>
               <textarea
-                onBlur={this.handleBlur.bind(this)}
-                onChange={this.handleChangeStructure.bind(this)}
+                onBlur={this.handleBlur}
+                onChange={this.handleChangeStructure}
                 value={this.state.structureText}/>
               {
                 this.state.structureError
@@ -170,11 +180,13 @@ export default class RecipeEditForm extends React.Component<RecipeEditFormProps,
             }
           </div>
           <br></br>
-          <div className="ui primary button" onClick={this.handleClickSave.bind(this)}>Save</div>
-          <div className="ui teal button" onClick={this.handleClickTest.bind(this)}>Test</div>
-          <div className="ui button" onClick={this.handleClickDiscard.bind(this)}>Discard</div>
+          <div className="ui primary button" onClick={this.handleClickSave}>Save</div>
+          <div className="ui teal button" onClick={this.handleClickTest}>Test</div>
+          <div className="ui button" onClick={this.handleClickDiscard}>Discard</div>
         </div>
       </div>
     );
   }
 }
+
+export default RecipeEditForm;

@@ -9,6 +9,7 @@
   },
   "globalDependencies": {
     "classnames": "registry:dt/classnames#0.0.0+20160316155526",
+    "core-decorators": "registry:dt/core-decorators#0.10.0+20160316155526",
     "firebase": "registry:dt/firebase#2.4.1+20160412125105",
     "js-yaml": "registry:dt/js-yaml#3.5.2+20160316171810",
     "mocha": "registry:dt/mocha#2.2.5+20160619032855",

@@ -11,7 +11,7 @@ const store = createStore(rootReducer, storeEffectEnhancer);
 
 ReactDOM.render(
   <Provider store={store}>
-    <Root />
+    <Root/>
   </Provider>,
   document.querySelector('#container')
 );
