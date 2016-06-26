@@ -6,7 +6,7 @@ import { autobind } from 'core-decorators';
 
 import Recipe from './Recipe';
 import RecipeEditForm from './RecipeEditForm';
-import * as Actions from '../redux/rootReducer';
+import * as Actions from '../actions';
 
 type RecipesProps = {
   dispatch?: any;

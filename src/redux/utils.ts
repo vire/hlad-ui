@@ -34,6 +34,7 @@ const effectsHandler = (effect, store) => {
 export const storeEffectEnhancer = (next) => (reducer, initialState) => {
   const store = next(reducer, initialState);
   store.subscribe(() => {
+    console.log('Executing effects');
     const { dispatch, getState } = store;
     while (sideEffects.length > 0) {
       const effect = sideEffects.shift();

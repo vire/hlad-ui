@@ -22,7 +22,7 @@ const formatURL = URL => URL.split(':')[1].slice(2);
 class Recipe extends React.Component<RecipeProps, {}> {
 
   @autobind
-  handleClick() {
+  handleEdit() {
     this.props.onEdit(this.props.ID);
   }
 
@@ -75,7 +75,7 @@ class Recipe extends React.Component<RecipeProps, {}> {
               <span className={classNames('ui', { blue: this.props.type === 'custom'}, 'small', 'label')}>
                 {this.props.type}
               </span>
-              <i className={classNames([style.edit], 'tiny configure icon')} onClick={this.handleClick}/>
+              <i className={classNames([style.edit], 'tiny configure icon')} onClick={this.handleEdit}/>
             </div>
           </div>
           <div className="item">
@@ -85,7 +85,9 @@ class Recipe extends React.Component<RecipeProps, {}> {
             ? (
                 <div className="item">
                   <div className="ui info message">
-                    <code className={style.structure}>{this.getStructureString(structure)}</code>
+                    <code className={style.structure}>
+                      {this.getStructureString(structure)}
+                    </code>
                   </div>
                 </div>
               )
@@ -96,6 +98,5 @@ class Recipe extends React.Component<RecipeProps, {}> {
     );
   }
 }
-
 
 export default Recipe;
