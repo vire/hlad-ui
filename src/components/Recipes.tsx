@@ -6,7 +6,17 @@ import { autobind } from 'core-decorators';
 
 import Recipe from './Recipe';
 import RecipeEditForm from './RecipeEditForm';
-import * as Actions from '../actions';
+import {
+  cancelNewForm,
+  cancelEditForm,
+  publishRecipes,
+  saveRecipe,
+  showEditForm,
+  showNewRecipeForm,
+  testNewRecipe,
+  updateRecipe
+} from '../redux/recipes';
+
 
 type RecipesProps = {
   dispatch?: any;
@@ -27,42 +37,42 @@ export class Recipes extends React.Component<RecipesProps, {}> {
 
   @autobind
   handleEdit(recipe) {
-    this.props.dispatch(Actions.showEditForm(recipe));
+    this.props.dispatch(showEditForm(recipe));
   }
 
   @autobind
   handleSave(recipe) {
-    this.props.dispatch(Actions.updateRecipe(recipe));
+    this.props.dispatch(updateRecipe(recipe));
   }
 
   @autobind
   handleSaveNew(recipe) {
-    this.props.dispatch(Actions.saveRecipe(recipe));
+    this.props.dispatch(saveRecipe(recipe));
   }
 
   @autobind
   handleTestNew(recipe) {
-    this.props.dispatch(Actions.testNewRecipe(recipe));
+    this.props.dispatch(testNewRecipe(recipe));
   }
 
   @autobind
   handleCancel(id) {
-    this.props.dispatch(Actions.cancelEditForm(id));
+    this.props.dispatch(cancelEditForm(id));
   }
 
   @autobind
   handleCancelNew() {
-    this.props.dispatch(Actions.cancelNewForm());
+    this.props.dispatch(cancelNewForm());
   }
 
   @autobind
   handleAddNew() {
-    this.props.dispatch(Actions.showNewRecipeForm());
+    this.props.dispatch(showNewRecipeForm());
   }
 
   @autobind
   handlePublish() {
-    this.props.dispatch(Actions.publish());
+    this.props.dispatch(publishRecipes());
   }
 
   render() {

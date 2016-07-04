@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
+import { Observable } from 'rxjs/Observable';
 
 import Recipes from '../components/Recipes';
 import * as Constants from '../constants';
@@ -10,9 +11,7 @@ type RootProps = {
 
 const mapDispatchToProps = (dispatch) => ({
   appMounted() {
-    return dispatch({
-      type: Constants.ROOT_MOUNTED,
-    });
+    dispatch(() => Observable.of({ type: Constants.ROOT_MOUNTED }));
   }
 });
 

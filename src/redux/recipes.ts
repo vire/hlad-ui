@@ -2,7 +2,27 @@ import uuid from 'node-uuid';
 import * as Effects from './effects';
 import { fromJS, Map as ImmutableMap } from 'immutable';
 
-export const clickedCancel = (state, payload) => {
+import * as Constants from '../constants';
+
+// Actions
+export const showEditForm = payload => ({ type: Constants.CLICKED_SHOW_EDIT_RECIPE, payload });
+
+export const saveRecipe = payload => ({ type: Constants.CLICKED_SAVE_RECIPE, payload });
+
+export const updateRecipe = payload => ({ type: Constants.CLICKED_UPDATE_RECIPE, payload });
+
+export const cancelEditForm = payload => ({ type: Constants.CLICKED_CANCEL_RECIPE, payload });
+
+export const cancelNewForm = () => ({ type: Constants.CLICKED_CANCEL_NEW_RECIPE });
+
+export const showNewRecipeForm = () => ({ type: Constants.CLICKED_SHOW_ADD_RECIPE });
+
+export const testNewRecipe = payload => ({ type: Constants.CLICKED_TEST_NEW_RECIPE, payload });
+
+export const publishRecipes = () => ({ type: Constants.CLICKED_PUBLISH });
+
+// Updaters
+const clickedCancel = (state, payload) => {
   return state
     .updateIn(['recipes', payload], recipe => recipe.set('editing', !recipe.get('editing')))
     .set('pendingTestID', null)
@@ -10,18 +30,18 @@ export const clickedCancel = (state, payload) => {
     .set('currentTest', null);
 };
 
-export const clickedUpdate = (state, payload) => {
+const addUpdateEffect = (state, payload) => {
   const effect = Effects.UpdateResourceEffect
     .data('recipes', payload);
   return state.update('effects', updater => updater.push(effect));
 };
 
-export const clickedShowEdit = (state, payload) => {
+const clickedShowEdit = (state, payload) => {
   return state
     .updateIn(['recipes', payload], recipe => recipe.set('editing', !recipe.get('editing')));
 };
 
-export const clickedSave = (state, payload) => {
+const clickedSave = (state, payload) => {
   const UUID = uuid.v1();
   const effect = Effects.CreateResourceEffect.data('recipes', Object.assign({}, payload, { UUID }));
 
@@ -30,7 +50,7 @@ export const clickedSave = (state, payload) => {
     .update('effects', updater => updater.push(effect));
 };
 
-export const clickedTestNew = (state, payload) => {
+const addTestNewEffect = (state, payload) => {
   const pendingTestID = uuid.v1();
 
   const effect = Effects.CreateResourceEffect
@@ -42,21 +62,23 @@ export const clickedTestNew = (state, payload) => {
     .update('effects', updater => updater.push(effect));
 };
 
-export const clickedCancelNew = (state) => {
+const clickedCancelNew = (state) => {
   return state
     .set('pendingTestID', null)
     .set('displayNewForm', false)
     .set('currentTest', null);
 };
 
-export const clickedShowAdd = (state) => state.set('displayNewForm', true);
+const clickedShowAdd = (state) => state.set('displayNewForm', true);
 
-export const receivedFromRecipes = (state, payload) => {
-  const recipes = ImmutableMap(payload).map((val, key) => fromJS(Object.assign({}, val, {ID: key})));
+const receivedFromRecipes = (state, payload) => {
+  const recipes = ImmutableMap(payload)
+    .map((val, key) => fromJS(Object.assign({}, val, {ID: key})));
+
   return state.set('recipes', recipes);
 };
 
-export const createdInRecipes = (state, payload) => {
+const createdInRecipes = (state, payload) => {
   const { UUID } = payload;
   const stateUUID = state.get('pendingRecipeIDs').find((val, key) => val === UUID);
 
@@ -71,7 +93,7 @@ export const createdInRecipes = (state, payload) => {
   return state;
 };
 
-export const receivedFromTestResults = (state, payload) => {
+const receivedFromTestResults = (state, payload) => {
   const currentTestResult: any = ImmutableMap(payload)
     .toArray()
     .filter((val: any) => state.get('pendingTestID') === val.pendingTestID)[0];
@@ -85,8 +107,29 @@ export const receivedFromTestResults = (state, payload) => {
   return state;
 };
 
-export const publish = (state) => {
+const addPublishEffect = (state) => {
   const effect = Effects.CreateResourceEffect
     .data('crawl_jobs', { job: Date.now()});
+
   return state.update('effects', updater => updater.push(effect));
-}
+};
+
+export const RecipesUpdater = {
+  clickedCancel,
+  clickedCancelNew,
+  clickedShowAdd,
+  clickedShowEdit,
+  clickedSave,
+  addTestNewEffect,
+  createdInRecipes,
+  addUpdateEffect,
+  addPublishEffect,
+  receivedFromTestResults,
+  receivedFromRecipes,
+};
+
+// Reducer
+
+const reducer = () => {}; // now just noop
+
+export default reducer;
