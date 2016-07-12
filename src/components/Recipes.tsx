@@ -16,7 +16,7 @@ import {
   testNewRecipe,
   updateRecipe
 } from '../redux/recipes';
-
+const style = require('./style.css');
 
 type RecipesProps = {
   dispatch?: any;
@@ -96,29 +96,43 @@ export class Recipes extends React.Component<RecipesProps, {}> {
         'green': agentActive,
         'red': !agentActive
       },
-      'large label'
+      'empty circular label'
     );
 
     return (
       <div>
-        <div className={testerClass}>{agentActive ? 'READY' : 'N/A'}</div>
-        {
-          !displayNewForm
-            ? (<button className="ui secondary button"
-                       onClick={this.handleAddNew}>Add</button>)
-            : null
-        }
-        <button className="ui secondary button"
-                onClick={this.handlePublish}>Publish</button>
-        {
-          displayNewForm
-            ? <RecipeEditForm
-                 currentTest={currentTest}
-                 onSave={this.handleSaveNew}
-                 onTest={this.handleTestNew}
-                 onCancel={this.handleCancelNew}/>
-            : recipes
-        }
+        <div className="ui grid">
+          <div className="four column row">
+            <div className="left floated column">
+              <button className="ui button"
+                      onClick={this.handlePublish}>Publish</button>
+              {
+                !displayNewForm
+                  ? (<button className="ui button"
+                             onClick={this.handleAddNew}>Add</button>)
+                  : null
+              }
+            </div>
+            <div className="right aligned floated column">
+              <div className={`ui segment ${style.indicator}`}>
+                <div className={testerClass}></div> Agent
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div className="sixteen wide column">
+              {
+                displayNewForm
+                  ? <RecipeEditForm
+                  currentTest={currentTest}
+                  onSave={this.handleSaveNew}
+                  onTest={this.handleTestNew}
+                  onCancel={this.handleCancelNew}/>
+                  : recipes
+              }
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

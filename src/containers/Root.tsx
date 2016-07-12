@@ -23,7 +23,7 @@ export class Root extends React.Component<RootProps, any> {
 
   render() {
     return (
-      <div className="ui container">
+      <div className="ui container" style={{marginTop: '20px'}}>
         <Recipes/>
       </div>
     );
