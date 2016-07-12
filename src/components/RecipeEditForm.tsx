@@ -71,7 +71,17 @@ class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditForm
 
   @autobind
   handleChangeStructure(event) {
+    let structureError;
+    let structure;
+
+    try {
+      structure = jsyaml.safeLoad(event.target.value);
+    } catch (err) {
+      structureError = err;
+    }
     const newState = Object.assign({}, this.state, {
+      structure,
+      structureError,
       structureText: event.target.value,
     });
 
@@ -134,10 +144,12 @@ class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditForm
   }
 
   render() {
+    const hasStructureError = !!this.state.structureError;
+
     return (
       <div className="ui segment">
         <div className="ui list">
-          <div className={classNames('ui form', { error: !!this.state.structureError})}>
+          <div className={classNames('ui form', { error: hasStructureError})}>
             <div className="field">
               <label>Name</label>
               <input type="text" onChange={this.handleChangeName} value={this.state.name}/>
@@ -153,8 +165,8 @@ class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditForm
                 <option value="custom">Custom</option>
               </select>
             </div>
-            <div className={classNames('field', {error: !!this.state.structureError})}>
-              <label>Text</label>
+            <div className={classNames('field', {error: hasStructureError})}>
+              <label>Recipe</label>
               <textarea
                 onBlur={this.handleBlur}
                 onChange={this.handleChangeStructure}
@@ -169,6 +181,9 @@ class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditForm
                   : null
               }
             </div>
+            <small>
+              <a href="http://nodeca.github.io/js-yaml/" rel="noreferrer" target="_blank" >Need help with YAML syntax?</a>
+            </small>
             {
               this.props.currentTest
                 ? (
@@ -180,8 +195,10 @@ class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditForm
             }
           </div>
           <br></br>
-          <div className="ui primary button" onClick={this.handleClickSave}>Save</div>
-          <div className="ui teal button" onClick={this.handleClickTest}>Test</div>
+          <div className={classNames('ui primary button', { disabled: hasStructureError })}
+               onClick={this.handleClickSave}>Save</div>
+          <div className={classNames('ui teal button', { disabled: hasStructureError })}
+               onClick={this.handleClickTest}>Test</div>
           <div className="ui button" onClick={this.handleClickDiscard}>Discard</div>
         </div>
       </div>
