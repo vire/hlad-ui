@@ -63,7 +63,7 @@
     "dotenv": "^2.0.0",
     "firebase": "^2.4.1",
     "immutable": "^3.7.6",
-    "js-yaml": "^3.5.5",
+    "js-yaml": "^3.6.1",
     "node-uuid": "^1.4.7",
     "react": "^15.1.0",
     "react-addons-test-utils": "^15.1.0",

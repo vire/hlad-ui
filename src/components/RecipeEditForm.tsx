@@ -29,8 +29,9 @@ class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditForm
 
   constructor(props) {
     super(props);
+    const safeDump = jsyaml.safeDump as any; // TODO remove when typings are updated
 
-    const structureText = props.structure ? jsyaml.safeDump(props.structure) : '';
+    const structureText = props.structure ? safeDump(props.structure, { lineWidth: 120 }) : '';
 
     this.state = {
       name: props.name || '',
