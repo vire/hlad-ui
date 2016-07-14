@@ -4,7 +4,7 @@ import * as Constants from '../constants';
 import { decorateReducer } from './utils';
 import { RecipeModel } from '../models/recipe';
 import { Effect } from './effects';
-import { rootMounted, receivedFromAgent } from './application';
+import { updateAgentStatus } from './application';
 import { RecipesUpdater } from './recipes';
 
 interface State extends ImmutableMap<string, any> {
@@ -31,10 +31,8 @@ const reducer = (state = initialState, {type, payload}) => {
   console.log('handling action:' + type, payload);
 
   switch (type) {
-    case Constants.ROOT_MOUNTED:
-      return rootMounted(state);
     case Constants.RECEIVED_FROM_AGENT:
-      return receivedFromAgent(state, payload);
+      return updateAgentStatus(state, payload);
     // recipes related stuff
     case Constants.CREATED_IN_RECIPES:
       return RecipesUpdater.createdInRecipes(state, payload);

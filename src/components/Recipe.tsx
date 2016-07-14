@@ -39,7 +39,8 @@ class Recipe extends React.Component<RecipeProps, {}> {
   getStructureString(structure) {
     let structureString = '';
     try {
-      structureString = jsyaml.safeDump(structure);
+      const safeDump = jsyaml.safeDump as any; // TODO remove when typings are updated
+      structureString = safeDump(structure, { lineWidth: 120 });
     } catch (parseError) {
       // TODO display some message about broken structure
       console.error(`YAML Parsing failed: ${parseError.message}`);
