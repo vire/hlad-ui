@@ -2,7 +2,7 @@ import * as Constants from '../constants';
 import { FirebaseService } from '../services/firebase';
 
 // Actions
-export const appMounted = () => ({ type: Constants.ROOT_MOUNTED });
+export const appMounted = () => ({ type: Constants.APP_MOUNTED });
 
 // Updaters
 export const updateAgentStatus = (state, payload) => state.set('agentActive', payload.active);
@@ -10,7 +10,7 @@ export const updateAgentStatus = (state, payload) => state.set('agentActive', pa
 // Epics
 // TODO firebaseService init catch!
 export const applicationEpic = (action$) => action$
-  .ofType(Constants.ROOT_MOUNTED)
+  .ofType(Constants.APP_MOUNTED)
   .flatMap(_ => FirebaseService.init(
     new Firebase(`https://${__FIREBASE_ID}.firebaseio.com`),
     ['recipes', 'tests', 'test_results', 'agent']

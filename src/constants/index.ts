@@ -1,4 +1,4 @@
-export const ROOT_MOUNTED = 'ROOT_MOUNTED';
+export const APP_MOUNTED = 'APP_MOUNTED';
 
 // triggered by user
 export const CLICKED_SHOW_EDIT_RECIPE = 'CLICKED_SHOW_EDIT_RECIPE';
@@ -10,7 +10,11 @@ export const CLICKED_SHOW_ADD_RECIPE = 'CLICKED_SHOW_ADD_RECIPE';
 export const CLICKED_TEST_NEW_RECIPE = 'CLICKED_TEST_NEW_RECIPE';
 export const CLICKED_PUBLISH = 'CLICKED_PUBLISH';
 
+
 // firebase triggered
+export const RECIPE_SAVED_OK = 'RECIPE_SAVED_OK'; // callback triggered
+export const RECIPE_SAVE_FAILED = 'RECIPE_SAVE_FAILED';
+
 export const RECEIVED_FROM_TESTS = 'RECEIVED_FROM_TESTS';
 export const CREATED_IN_TESTS = 'CREATED_IN_TESTS';
 export const CREATE_FAILED_IN_TESTS = 'CREATE_FAILED_IN_TESTS';

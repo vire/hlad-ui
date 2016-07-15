@@ -1,14 +1,15 @@
 import { Observable } from 'rxjs';
 
-interface InitFunction {
-  (rootRef: Firebase, keys: Array<string>): Observable<any>;
+type payload = {
+  type: string;
+  payload: any;
 }
 
 export interface FirebaseService {
   rootRef?: Firebase;
-  init: InitFunction;
-  create(key: string, value: any): Observable<{}>;
-  update(key: string, value: any): Observable<{}>;
+  init(rootRef: Firebase, keys: Array<string>): Observable<any>;
+  create(key: string, value: any): Observable<payload>;
+  update(key: string, value: any): Observable<payload>;
 }
 
 export const FirebaseService: FirebaseService  = {

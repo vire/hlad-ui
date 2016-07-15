@@ -24,6 +24,7 @@ type RecipesProps = {
   recipes: Immutable.Iterable<any, any>;
   currentTest: any;
   agentActive: boolean;
+  saving: boolean;
 }
 
 const mapStateToProps = (state: any): RecipesProps => ({
@@ -31,6 +32,7 @@ const mapStateToProps = (state: any): RecipesProps => ({
   recipes: state.get('recipes'),
   currentTest: state.get('currentTest'),
   agentActive: state.get('agentActive'),
+  saving: state.get('saving'),
 });
 
 export class Recipes extends React.Component<RecipesProps, {}> {
@@ -76,7 +78,7 @@ export class Recipes extends React.Component<RecipesProps, {}> {
   }
 
   render() {
-    const { agentActive, currentTest, displayNewForm } = this.props;
+    const { agentActive, currentTest, displayNewForm, saving } = this.props;
 
     const recipes = this.props.recipes.toArray().map(
       (recipe, idx) => (
@@ -86,6 +88,7 @@ export class Recipes extends React.Component<RecipesProps, {}> {
             onEdit={this.handleEdit}
             onSave={this.handleSave}
             onCancel={this.handleCancel}
+            saving={saving}
             {...recipe.toJS()}/>
       )
     );
@@ -127,7 +130,8 @@ export class Recipes extends React.Component<RecipesProps, {}> {
                   currentTest={currentTest}
                   onSave={this.handleSaveNew}
                   onTest={this.handleTestNew}
-                  onCancel={this.handleCancelNew}/>
+                  onCancel={this.handleCancelNew}
+                  saving={saving}/>
                   : recipes
               }
             </div>

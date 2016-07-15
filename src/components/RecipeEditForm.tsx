@@ -23,6 +23,7 @@ type RecipeEditFormProps = {
   structure?: any;
   URL?: string;
   type?: string;
+  saving: boolean;
 }
 
 class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditFormState> {
@@ -196,7 +197,10 @@ class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditForm
             }
           </div>
           <br></br>
-          <div className={classNames('ui primary button', { disabled: hasStructureError })}
+          <div className={classNames('ui primary button', {
+            loading: this.props.saving,
+            disabled: hasStructureError
+          })}
                onClick={this.handleClickSave}>Save</div>
           <div className={classNames('ui teal button', { disabled: hasStructureError })}
                onClick={this.handleClickTest}>Test</div>

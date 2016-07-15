@@ -25,6 +25,7 @@ const initialState: State = fromJS({
   recipes: [],
   effects: [],
   agentActive: false,
+  saving: false,
 });
 
 const reducer = (state = initialState, {type, payload}) => {
@@ -48,15 +49,13 @@ const reducer = (state = initialState, {type, payload}) => {
     case Constants.CLICKED_CANCEL_NEW_RECIPE:
       return RecipesUpdater.clickedCancelNew(state);
     case Constants.CLICKED_SAVE_RECIPE:
-      return RecipesUpdater.clickedSave(state, payload);
+      return RecipesUpdater.clickedSave(state);
+    case Constants.RECIPE_SAVED_OK:
+      return RecipesUpdater.savedOk(state);
     case Constants.CLICKED_SHOW_EDIT_RECIPE:
       return RecipesUpdater.clickedShowEdit(state, payload);
-    case Constants.CLICKED_UPDATE_RECIPE:
-      return RecipesUpdater.addUpdateEffect(state, payload);
     case Constants.CLICKED_CANCEL_RECIPE:
       return RecipesUpdater.clickedCancel(state, payload);
-    case Constants.CLICKED_PUBLISH:
-      return RecipesUpdater.addPublishEffect(state);
     default:
       console.warn('Unhandled action', type);
       return state;

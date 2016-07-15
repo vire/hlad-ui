@@ -3,6 +3,7 @@ import * as Effects from './effects';
 import { fromJS, Map as ImmutableMap } from 'immutable';
 
 import * as Constants from '../constants';
+import {FirebaseService} from '../services/firebase';
 
 // Actions
 export const showEditForm = payload => ({ type: Constants.CLICKED_SHOW_EDIT_RECIPE, payload });
@@ -30,25 +31,16 @@ const clickedCancel = (state, payload) => {
     .set('currentTest', null);
 };
 
-const addUpdateEffect = (state, payload) => {
-  const effect = Effects.UpdateResourceEffect
-    .data('recipes', payload);
-  return state.update('effects', updater => updater.push(effect));
-};
-
 const clickedShowEdit = (state, payload) => {
   return state
     .updateIn(['recipes', payload], recipe => recipe.set('editing', !recipe.get('editing')));
 };
 
-const clickedSave = (state, payload) => {
-  const UUID = uuid.v1();
-  const effect = Effects.CreateResourceEffect.data('recipes', Object.assign({}, payload, { UUID }));
+const clickedSave = (state) => state.set('saving', true);
 
-  return state
-    .update('pendingRecipeIDs', updater => updater.push(UUID))
-    .update('effects', updater => updater.push(effect));
-};
+const savedOk = (state) => state
+  .set('displayNewForm', false)
+  .set('saving', false);
 
 const addTestNewEffect = (state, payload) => {
   const pendingTestID = uuid.v1();
@@ -107,13 +99,6 @@ const receivedFromTestResults = (state, payload) => {
   return state;
 };
 
-const addPublishEffect = (state) => {
-  const effect = Effects.CreateResourceEffect
-    .data('crawl_jobs', { job: Date.now()});
-
-  return state.update('effects', updater => updater.push(effect));
-};
-
 export const RecipesUpdater = {
   clickedCancel,
   clickedCancelNew,
@@ -122,14 +107,27 @@ export const RecipesUpdater = {
   clickedSave,
   addTestNewEffect,
   createdInRecipes,
-  addUpdateEffect,
-  addPublishEffect,
   receivedFromTestResults,
   receivedFromRecipes,
+  savedOk,
 };
 
-// Reducer
+// Epics
+export const updateRecipeEpic = action$ => action$
+  .ofType(Constants.CLICKED_UPDATE_RECIPE)
+  .flatMap(({ payload }) => FirebaseService.update('recipes', payload));
 
+export const publishAllEpic = action$ => action$
+  .ofType(Constants.CLICKED_PUBLISH)
+  .flatMap(({ payload }) => FirebaseService.create('crawl_jobs', { job: Date.now()}));
+
+export const createRecipeEpic = action$ => action$
+  .ofType(Constants.CLICKED_SAVE_RECIPE).delay(5000)
+  .flatMap(({ payload }) => FirebaseService.create('recipes', payload))
+  .mapTo({ type: Constants.RECIPE_SAVED_OK })
+  .catch({ type: Constants.RECIPE_SAVE_FAILED});
+
+// Reducer
 const reducer = () => {}; // now just noop
 
 export default reducer;

@@ -10,6 +10,7 @@ const style = require('./style.css');
 
 interface RecipeProps extends RecipeModel {
   editing: boolean;
+  saving: boolean;
   onEdit(ID: string): void;
   onCancel(ID: string): void;
   onSave(recipe: any): void;
@@ -63,6 +64,7 @@ class Recipe extends React.Component<RecipeProps, {}> {
           URL={this.props.URL}
           structure={structure}
           type={this.props.type}
+          saving={this.props.saving}
         />
       );
     }
