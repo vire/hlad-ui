@@ -11,11 +11,12 @@ const style = require('./style.css');
 interface RecipeProps extends RecipeModel {
   editing: boolean;
   saving: boolean;
+  testing: boolean;
   onEdit(ID: string): void;
   onCancel(ID: string): void;
   onSave(recipe: any): void;
   onTest(test: TestModel): any;
-  currentTest: TestModel;
+  testResult: any;
 }
 
 const formatURL = URL => URL.split(':')[1].slice(2);
@@ -59,12 +60,13 @@ class Recipe extends React.Component<RecipeProps, {}> {
           onSave={this.handleSave}
           onCancel={this.handleCancel}
           onTest={this.props.onTest}
-          currentTest={this.props.currentTest}
           name={this.props.name}
           URL={this.props.URL}
           structure={structure}
           type={this.props.type}
           saving={this.props.saving}
+          testing={this.props.testing}
+          testResult={this.props.testResult}
         />
       );
     }

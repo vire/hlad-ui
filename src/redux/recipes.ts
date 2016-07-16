@@ -18,50 +18,40 @@ export const cancelNewForm = () => ({ type: Constants.CLICKED_CANCEL_NEW_RECIPE 
 
 export const showNewRecipeForm = () => ({ type: Constants.CLICKED_SHOW_ADD_RECIPE });
 
-export const testNewRecipe = payload => ({ type: Constants.CLICKED_TEST_NEW_RECIPE, payload });
+export const requestTesting = payload => ({ type: Constants.CLICKED_TEST_RECIPE, payload });
 
 export const publishRecipes = () => ({ type: Constants.CLICKED_PUBLISH });
 
 // Updaters
-const clickedCancel = (state, payload) => {
-  return state
-    .updateIn(['recipes', payload], recipe => recipe.set('editing', !recipe.get('editing')))
-    .set('pendingTestID', null)
-    .set('displayNewForm', false)
-    .set('currentTest', null);
-};
+const clickedCancelNew = (state) => state
+  .set('pendingTestResultKey', undefined)
+  .set('testing', false)
+  .set('testResult', undefined)
+  .set('displayNewForm', false);
 
-const clickedShowEdit = (state, payload) => {
-  return state
-    .updateIn(['recipes', payload], recipe => recipe.set('editing', !recipe.get('editing')));
-};
+const clickedCancelUpdate = (state, payload) => state
+  .set('displayNewForm', false)
+  .set('pendingTestResultKey', undefined)
+  .set('testing', false)
+  .set('testResult', undefined)
+  .updateIn(['recipes', payload], recipe => recipe.set('editing', !recipe.get('editing')));
 
-const clickedSave = (state) => state.set('saving', true);
+const clickedShowEdit = (state, payload) => state
+  .updateIn(['recipes', payload], recipe => recipe.set('editing', !recipe.get('editing')));
 
-const savedOk = (state) => state
+const clickedShowAdd = (state) => state.set('displayNewForm', true);
+
+const clickedSave = state => state.set('saving', true);
+
+const savedOk = state => state
   .set('displayNewForm', false)
   .set('saving', false);
 
-const addTestNewEffect = (state, payload) => {
-  const pendingTestID = uuid.v1();
+// TODO const saveFailed = state=> state;
 
-  const effect = Effects.CreateResourceEffect
-    .data('test_jobs', Object.assign({}, payload, { pendingTestID }));
-
-  return state
-    .set('pendingTestID', pendingTestID)
-    .set('currentTest', fromJS(payload))
-    .update('effects', updater => updater.push(effect));
-};
-
-const clickedCancelNew = (state) => {
-  return state
-    .set('pendingTestID', null)
-    .set('displayNewForm', false)
-    .set('currentTest', null);
-};
-
-const clickedShowAdd = (state) => state.set('displayNewForm', true);
+const testSavedOk = (state, firebaseKey) => state
+  .set('pendingTestResultKey', firebaseKey)
+  .set('testing', true);
 
 const receivedFromRecipes = (state, payload) => {
   const recipes = ImmutableMap(payload)
@@ -70,46 +60,32 @@ const receivedFromRecipes = (state, payload) => {
   return state.set('recipes', recipes);
 };
 
-const createdInRecipes = (state, payload) => {
-  const { UUID } = payload;
-  const stateUUID = state.get('pendingRecipeIDs').find((val, key) => val === UUID);
-
-  if (stateUUID) {
-    return state
-      .set('pendingTestID', null)
-      .set('currentTest', null)
-      .set('displayNewForm', false)
-      .update('pendingRecipeIDs', updater => updater.filterNot((val, key) => val === stateUUID));
-  }
-
-  return state;
-};
-
 const receivedFromTestResults = (state, payload) => {
   const currentTestResult: any = ImmutableMap(payload)
     .toArray()
-    .filter((val: any) => state.get('pendingTestID') === val.pendingTestID)[0];
+    .find((val: any) => state.get('pendingTestResultKey') === val.pendingTestID);
 
   if (currentTestResult) {
+    const result = currentTestResult.result ? currentTestResult.result : 'Noting matching found';
     return state
-      .set('pendingTestID', null)
-      .setIn(['currentTest', 'result'], currentTestResult.result);
+      .set('pendingTestResultKey', undefined)
+      .set('testing', false)
+      .set('testResult', result);
   }
 
   return state;
 };
 
 export const RecipesUpdater = {
-  clickedCancel,
+  clickedCancelUpdate,
   clickedCancelNew,
   clickedShowAdd,
   clickedShowEdit,
   clickedSave,
-  addTestNewEffect,
-  createdInRecipes,
   receivedFromTestResults,
   receivedFromRecipes,
   savedOk,
+  testSavedOk,
 };
 
 // Epics
@@ -126,6 +102,13 @@ export const createRecipeEpic = action$ => action$
   .flatMap(({ payload }) => FirebaseService.create('recipes', payload))
   .mapTo({ type: Constants.RECIPE_SAVED_OK })
   .catch({ type: Constants.RECIPE_SAVE_FAILED});
+
+export const createTestEpic = action$ => action$
+  .ofType(Constants.CLICKED_TEST_RECIPE)
+  .flatMap(({ payload }) => FirebaseService.create('test_jobs', payload))
+  .map(action => ({ type: Constants.TEST_SAVED_OK, payload: action.payload.firebaseKey })) // means the test started and some timeout has to be scheduled
+  .catch({ type: Constants.TEST_SAVE_FAILED});
+  // TODO - add here some .mergeToTimeoutSource
 
 // Reducer
 const reducer = () => {}; // now just noop

@@ -10,10 +10,11 @@ import './styles/app.css';
 import { storeEffectEnhancer } from './redux/utils';
 import { applicationEpic } from './redux/application';
 
-import { createRecipeEpic, updateRecipeEpic, publishAllEpic } from './redux/recipes';
+import { createRecipeEpic, updateRecipeEpic, publishAllEpic, createTestEpic } from './redux/recipes';
 
 const combinedEpics = combineEpics(
   createRecipeEpic,
+  createTestEpic,
   applicationEpic,
   publishAllEpic,
   updateRecipeEpic

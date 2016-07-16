@@ -3,8 +3,6 @@ import * as jsyaml from 'js-yaml';
 import classNames from 'classnames';
 import { autobind } from 'core-decorators';
 
-import TestResult from './TestResult';
-
 type RecipeEditFormState = {
   name: string;
   URL: string;
@@ -19,11 +17,12 @@ type RecipeEditFormProps = {
   onSave: any;
   onTest: any;
   name?: string;
-  currentTest: any;
   structure?: any;
   URL?: string;
   type?: string;
   saving: boolean;
+  testing: boolean;
+  testResult: any;
 }
 
 class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditFormState> {
@@ -186,25 +185,30 @@ class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditForm
             <small>
               <a href="http://nodeca.github.io/js-yaml/" rel="noreferrer" target="_blank" >Need help with YAML syntax?</a>
             </small>
-            {
-              this.props.currentTest
-                ? (
-                    <div className="field">
-                      <TestResult {...this.props.currentTest.toJS()}/>
-                    </div>
-                  )
-                : null
-            }
           </div>
           <br></br>
+          { this.props.testResult
+            ? (
+                <div className="ui info message">
+                  <pre>
+                  { JSON.stringify(this.props.testResult, null, 2) }
+                  </pre>
+                </div>
+              )
+            : null
+          }
           <div className={classNames('ui primary button', {
             loading: this.props.saving,
             disabled: hasStructureError
           })}
                onClick={this.handleClickSave}>Save</div>
-          <div className={classNames('ui teal button', { disabled: hasStructureError })}
+          <div className={classNames('ui teal button', {
+            loading: this.props.testing,
+            disabled: hasStructureError
+          })}
                onClick={this.handleClickTest}>Test</div>
           <div className="ui button" onClick={this.handleClickDiscard}>Discard</div>
+
         </div>
       </div>
     );

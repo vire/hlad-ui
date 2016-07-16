@@ -1,3 +1,5 @@
+import Firebase from 'firebase';
+
 import * as Constants from '../constants';
 import { FirebaseService } from '../services/firebase';
 
@@ -16,7 +18,7 @@ export const applicationEpic = (action$) => action$
     ['recipes', 'tests', 'test_results', 'agent']
   ));
 
-const reducer = () => {} // now just noop
+const reducer = () => {}; // now just noop
 
 export default reducer;
 

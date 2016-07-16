@@ -34,10 +34,11 @@ export const FirebaseService: FirebaseService  = {
     const PREFIX = key.toUpperCase();
 
     return Observable.create(observer => {
-      this.rootRef
+      const newRef = this.rootRef
         .child(key)
-        .push()
-        .set(value, (err) => {
+        .push();
+
+        newRef.set(value, (err) => {
           if (err) {
             observer.error({
               type: `CREATE_FAILED_IN_${PREFIX}`,
@@ -49,7 +50,7 @@ export const FirebaseService: FirebaseService  = {
           } else {
             observer.next({
               type: `CREATED_IN_${PREFIX}`,
-              payload: value
+              payload: Object.assign({}, value, { firebaseKey: newRef.key() })
             });
           }
         });

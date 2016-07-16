@@ -13,7 +13,7 @@ import {
   saveRecipe,
   showEditForm,
   showNewRecipeForm,
-  testNewRecipe,
+  requestTesting,
   updateRecipe
 } from '../redux/recipes';
 const style = require('./style.css');
@@ -22,17 +22,19 @@ type RecipesProps = {
   dispatch?: any;
   displayNewForm: boolean;
   recipes: Immutable.Iterable<any, any>;
-  currentTest: any;
   agentActive: boolean;
   saving: boolean;
+  testing: boolean;
+  testResult: any // TODO typings
 }
 
 const mapStateToProps = (state: any): RecipesProps => ({
   displayNewForm: state.get('displayNewForm'),
   recipes: state.get('recipes'),
-  currentTest: state.get('currentTest'),
   agentActive: state.get('agentActive'),
   saving: state.get('saving'),
+  testing: state.get('testing'),
+  testResult: state.get('testResult'),
 });
 
 export class Recipes extends React.Component<RecipesProps, {}> {
@@ -53,8 +55,8 @@ export class Recipes extends React.Component<RecipesProps, {}> {
   }
 
   @autobind
-  handleTestNew(recipe) {
-    this.props.dispatch(testNewRecipe(recipe));
+  handleTestRequest(recipe) {
+    this.props.dispatch(requestTesting(recipe));
   }
 
   @autobind
@@ -78,17 +80,18 @@ export class Recipes extends React.Component<RecipesProps, {}> {
   }
 
   render() {
-    const { agentActive, currentTest, displayNewForm, saving } = this.props;
+    const { agentActive, displayNewForm, saving, testing, testResult } = this.props;
 
     const recipes = this.props.recipes.toArray().map(
       (recipe, idx) => (
         <Recipe key={idx}
-            currentTest={currentTest}
-            onTest={this.handleTestNew}
+            onTest={this.handleTestRequest}
             onEdit={this.handleEdit}
             onSave={this.handleSave}
             onCancel={this.handleCancel}
             saving={saving}
+            testing={testing}
+            testResult={testResult}
             {...recipe.toJS()}/>
       )
     );
@@ -127,11 +130,12 @@ export class Recipes extends React.Component<RecipesProps, {}> {
               {
                 displayNewForm
                   ? <RecipeEditForm
-                  currentTest={currentTest}
                   onSave={this.handleSaveNew}
-                  onTest={this.handleTestNew}
+                  onTest={this.handleTestRequest}
                   onCancel={this.handleCancelNew}
-                  saving={saving}/>
+                  saving={saving}
+                  testing={testing}
+                  testResult={testResult}/>
                   : recipes
               }
             </div>
