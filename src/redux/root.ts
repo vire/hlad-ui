@@ -29,39 +29,35 @@ const initialState: State = fromJS({
   testResult: undefined,
 });
 
-const reducer = (state = initialState, {type, payload}) => {
-  console.log('handling action:' + type, payload);
+const createReducer = (initialState = {}, reducerMap) => {
+  return (previousState = initialState, action) => {
+    const next = reducerMap[action.type];
+    if (next) {
+      if (typeof next !== 'function') {
+        throw Error(`Invalid reduction function with typeof "${typeof next}"`);
+      }
 
-  switch (type) {
-    case Constants.RECEIVED_FROM_AGENT:
-      return updateAgentStatus(state, payload);
-    case Constants.RECEIVED_FROM_RECIPES:
-      return RecipesUpdater.receivedFromRecipes(state, payload);
-    case Constants.RECEIVED_FROM_TEST_RESULTS:
-      return RecipesUpdater.receivedFromTestResults(state, payload);
+      // bingo we have a reduction fn let's apply it
+      return next(previousState, action);
+    }
 
-    // recipes state modifications by user
-    case Constants.CLICKED_SHOW_ADD_RECIPE:
-      return RecipesUpdater.clickedShowAdd(state);
-    case Constants.CLICKED_SHOW_EDIT_RECIPE:
-      return RecipesUpdater.clickedShowEdit(state, payload);
+    console.warn(`Action: ${action.type} not handled in reducer`);
 
-    case Constants.CLICKED_SAVE_RECIPE:
-      return RecipesUpdater.clickedSave(state);
-    case Constants.RECIPE_SAVED_OK:
-      return RecipesUpdater.savedOk(state);
-
-    case Constants.TEST_SAVED_OK:
-      return RecipesUpdater.testSavedOk(state, payload);
-
-    case Constants.CLICKED_CANCEL_NEW_RECIPE:
-      return RecipesUpdater.clickedCancelNew(state);
-    case Constants.CLICKED_CANCEL_RECIPE:
-      return RecipesUpdater.clickedCancelUpdate(state, payload);
-    default:
-      console.warn('Unhandled action', type);
-      return state;
-  }
+    return previousState;
+  };
 };
+
+const reducer = createReducer(initialState, {
+  [Constants.RECEIVED_FROM_AGENT]: (state, action) => updateAgentStatus(state, action.payload),
+  [Constants.RECEIVED_FROM_RECIPES]: (state, action) => RecipesUpdater.receivedFromRecipes(state, action.payload),
+  [Constants.RECEIVED_FROM_TEST_RESULTS]: (state, action) => RecipesUpdater.receivedFromTestResults(state, action.payload),
+  [Constants.CLICKED_SHOW_ADD_RECIPE]: (state, action) => RecipesUpdater.clickedShowAdd(state),
+  [Constants.CLICKED_SHOW_EDIT_RECIPE]: (state, action) => RecipesUpdater.clickedShowEdit(state, action.payload),
+  [Constants.CLICKED_SAVE_RECIPE]: (state, action) => RecipesUpdater.clickedSave(state),
+  [Constants.RECIPE_SAVED_OK]: (state, action) => RecipesUpdater.savedOk(state),
+  [Constants.TEST_SAVED_OK]: (state, action) => RecipesUpdater.testSavedOk(state, action.payload),
+  [Constants.CLICKED_CANCEL_NEW_RECIPE]: (state, action) => RecipesUpdater.clickedCancelNew(state),
+  [Constants.CLICKED_CANCEL_RECIPE]: (state, action) => RecipesUpdater.clickedCancelUpdate(state, action.payload),
+});
 
 export default decorateReducer(reducer);

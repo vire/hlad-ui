@@ -1,5 +1,3 @@
-import uuid from 'node-uuid';
-import * as Effects from './effects';
 import { fromJS, Map as ImmutableMap } from 'immutable';
 
 import * as Constants from '../constants';

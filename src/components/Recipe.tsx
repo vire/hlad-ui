@@ -84,7 +84,7 @@ class Recipe extends React.Component<RecipeProps, {}> {
             </div>
           </div>
           <div className="item">
-            <a href={this.props.URL} target="_blank">{formatURL(this.props.URL)}</a>
+            <a href={this.props.URL} target="_blank">{decodeURI(formatURL(this.props.URL))}</a>
           </div>
           { structure
             ? (
