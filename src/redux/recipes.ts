@@ -1,7 +1,7 @@
 import { fromJS, Map as ImmutableMap } from 'immutable';
 
 import * as Constants from '../constants';
-import {FirebaseService} from '../services/firebase';
+import { FirebaseService } from '../services/firebase';
 
 // Actions
 export const showEditForm = payload => ({ type: Constants.CLICKED_SHOW_EDIT_RECIPE, payload });

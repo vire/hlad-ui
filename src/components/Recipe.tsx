@@ -15,7 +15,7 @@ interface RecipeProps extends RecipeModel {
   onEdit(ID: string): void;
   onCancel(ID: string): void;
   onSave(recipe: any): void;
-  onTest(test: TestModel): any;
+  onTest(test: TestModel): void;
   testResult: any;
 }
 

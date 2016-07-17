@@ -1,16 +1,13 @@
 import { fromJS, Map as ImmutableMap } from 'immutable';
 
 import * as Constants from '../constants';
-import { decorateReducer } from './utils';
 import { RecipeModel } from '../models/recipe';
-import { Effect } from './effects';
 import { updateAgentStatus } from './application';
 import { RecipesUpdater } from './recipes';
 
 interface State extends ImmutableMap<string, any> {
   agentActive: boolean;
   displayNewForm: boolean;
-  effects: Array<Effect>;
   pendingTestResultKey: string;
   recipes: RecipeModel[];
   saving: boolean;
@@ -21,7 +18,6 @@ interface State extends ImmutableMap<string, any> {
 const initialState: State = fromJS({
   agentActive: false,
   displayNewForm: false,
-  effects: [],
   pendingTestResultKey: undefined,
   recipes: [],
   saving: false,
@@ -47,7 +43,7 @@ const createReducer = (initialState = {}, reducerMap) => {
   };
 };
 
-const reducer = createReducer(initialState, {
+export default createReducer(initialState, {
   [Constants.RECEIVED_FROM_AGENT]: (state, action) => updateAgentStatus(state, action.payload),
   [Constants.RECEIVED_FROM_RECIPES]: (state, action) => RecipesUpdater.receivedFromRecipes(state, action.payload),
   [Constants.RECEIVED_FROM_TEST_RESULTS]: (state, action) => RecipesUpdater.receivedFromTestResults(state, action.payload),
@@ -59,5 +55,3 @@ const reducer = createReducer(initialState, {
   [Constants.CLICKED_CANCEL_NEW_RECIPE]: (state, action) => RecipesUpdater.clickedCancelNew(state),
   [Constants.CLICKED_CANCEL_RECIPE]: (state, action) => RecipesUpdater.clickedCancelUpdate(state, action.payload),
 });
-
-export default decorateReducer(reducer);
