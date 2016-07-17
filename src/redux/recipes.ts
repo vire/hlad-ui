@@ -61,7 +61,7 @@ const receivedFromRecipes = (state, payload) => {
 const receivedFromTestResults = (state, payload) => {
   const currentTestResult: any = ImmutableMap(payload)
     .toArray()
-    .find((val: any) => state.get('pendingTestResultKey') === val.pendingTestID);
+    .find((val: any) => state.get('pendingTestResultKey') === val.pendingTestResultKey);
 
   if (currentTestResult) {
     const result = currentTestResult.result ? currentTestResult.result : 'Noting matching found';
