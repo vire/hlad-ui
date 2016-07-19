@@ -35,7 +35,7 @@ class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditForm
 
     this.state = {
       name: props.name || '',
-      URL: decodeURI(props.URL) || '',
+      URL: props.URL || '',
       recipeType: props.type || 'standard',
       structureText,
       structure: props.structure || null,
