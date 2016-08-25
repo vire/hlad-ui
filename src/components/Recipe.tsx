@@ -2,6 +2,7 @@ import * as React from 'react';
 import * as jsyaml from 'js-yaml';
 import classNames from 'classnames';
 import { autobind } from 'core-decorators';
+import * as url from 'url';
 
 import RecipeEditForm from './RecipeEditForm';
 import { RecipeModel } from '../models/recipe';
@@ -19,7 +20,11 @@ interface RecipeProps extends RecipeModel {
   testResult: any;
 }
 
-const formatURL = URL => URL.split(':')[1].slice(2);
+const formatURL = URL => {
+  const { host, path, hash, href } = url.parse(URL);
+
+  return host ? [host, path, hash].filter(Boolean).join('') : href;
+};
 
 class Recipe extends React.Component<RecipeProps, {}> {
 
