@@ -37,30 +37,32 @@ const mapStateToProps = (state: any): RecipesProps => ({
   testResult: state.get('testResult'),
 });
 
+type RecipeType = any; // TODO create Recipe interface
+
 export class Recipes extends React.Component<RecipesProps, {}> {
 
   @autobind
-  handleEdit(recipe) {
+  handleEdit(recipe: RecipeType) {
     this.props.dispatch(showEditForm(recipe));
   }
 
   @autobind
-  handleSave(recipe) {
+  handleSave(recipe: RecipeType) {
     this.props.dispatch(updateRecipe(recipe));
   }
 
   @autobind
-  handleSaveNew(recipe) {
+  handleSaveNew(recipe: RecipeType) {
     this.props.dispatch(saveRecipe(recipe));
   }
 
   @autobind
-  handleTestRequest(recipe) {
+  handleTestRequest(recipe: RecipeType) {
     this.props.dispatch(requestTesting(recipe));
   }
 
   @autobind
-  handleCancel(id) {
+  handleCancel(id: string) {
     this.props.dispatch(cancelEditForm(id));
   }
 

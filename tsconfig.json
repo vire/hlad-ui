@@ -3,12 +3,24 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
     "jsx": "react",
     "module": "es6",
     "outDir": "tmp",
     "sourceMap": true,
     "target": "es6",
-    "moduleResolution": "node"
+    "pretty": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "types": [
+      "node"
+    ],
+    "lib": [
+      "dom",
+      "es6"
+    ]
   },
   "exclude": [
     "node_modules"

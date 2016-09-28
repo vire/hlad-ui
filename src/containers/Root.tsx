@@ -23,4 +23,4 @@ export class Root extends React.Component<RootProps, any> {
   }
 }
 
-export default connect(undefined, { appMounted })(Root as any);
+export default connect(() => ({}), { appMounted })(Root as any);

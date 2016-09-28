@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import {Observable, Observer} from 'rxjs';
 
 type payload = {
   type: string;
@@ -13,12 +13,12 @@ export interface FirebaseService {
 }
 
 export const FirebaseService: FirebaseService  = {
-  rootRef: null,
+  rootRef: undefined,
 
   init(rootRef: Firebase, keys: Array<string>) {
     this.rootRef = rootRef;
 
-    return Observable.create(observer => {
+    return Observable.create((observer: Observer<any>) => {
       keys.forEach((keyName) => {
         rootRef
           .child(keyName)
@@ -33,12 +33,12 @@ export const FirebaseService: FirebaseService  = {
   create(key, value) {
     const PREFIX = key.toUpperCase();
 
-    return Observable.create(observer => {
+    return Observable.create((observer: Observer<any>) => {
       const newRef = this.rootRef
         .child(key)
         .push();
 
-        newRef.set(value, (err) => {
+        newRef.set(value, (err: Error) => {
           if (err) {
             observer.error({
               type: `CREATE_FAILED_IN_${PREFIX}`,
@@ -61,7 +61,7 @@ export const FirebaseService: FirebaseService  = {
     const PREFIX = key.toUpperCase();
     const { id, name, type, structure, URL } = value;
 
-    return Observable.create(observer => {
+    return Observable.create((observer: Observer<any>) => {
       this.rootRef
         .child(`${key}/${id}`)
         .update({
@@ -69,7 +69,7 @@ export const FirebaseService: FirebaseService  = {
           type,
           structure,
           URL: URL,
-        }, (err) => {
+        }, (err: Error) => {
           if (err) {
             observer.error({
               type: `CREATE_FAILED_IN_${PREFIX}`,

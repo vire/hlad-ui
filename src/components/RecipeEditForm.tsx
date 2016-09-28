@@ -9,7 +9,7 @@ type RecipeEditFormState = {
   recipeType: string;
   structure: any;
   structureText: string;
-  structureError: Error;
+  structureError: Error | undefined;
 }
 
 type RecipeEditFormProps = {
@@ -27,7 +27,7 @@ type RecipeEditFormProps = {
 
 class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditFormState> {
 
-  constructor(props) {
+  constructor(props: RecipeEditFormProps) {
     super(props);
     const safeDump = jsyaml.safeDump as any; // TODO remove when typings are updated
 
@@ -39,12 +39,12 @@ class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditForm
       recipeType: props.type || 'standard',
       structureText,
       structure: props.structure || null,
-      structureError: null,
+      structureError: undefined,
     };
   }
 
   @autobind
-  handleChangeName(event) {
+  handleChangeName(event: any) {
     const newState = Object.assign({}, this.state, {
       name: event.target.value,
     });
@@ -53,7 +53,7 @@ class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditForm
   }
 
   @autobind
-  handleChangeURL(event) {
+  handleChangeURL(event: any) {
     const newState = Object.assign({}, this.state, {
       URL: event.target.value,
     });
@@ -62,7 +62,7 @@ class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditForm
   }
 
   @autobind
-  handleChangeType(event) {
+  handleChangeType(event: any) {
     const newState = Object.assign({}, this.state, {
       recipeType: event.target.value,
     });
@@ -71,9 +71,9 @@ class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditForm
   }
 
   @autobind
-  handleChangeStructure(event) {
-    let structureError;
-    let structure;
+  handleChangeStructure(event: any) {
+    let structureError: Error | undefined = undefined;
+    let structure: any;
 
     try {
       structure = jsyaml.safeLoad(event.target.value);
@@ -126,9 +126,9 @@ class RecipeEditForm extends React.Component<RecipeEditFormProps, RecipeEditForm
   }
 
   @autobind
-  handleBlur(event) {
+  handleBlur(event: any) {
     let structure = null;
-    let structureError = null;
+    let structureError = undefined;
 
     try {
       structure = jsyaml.safeLoad(event.target.value);

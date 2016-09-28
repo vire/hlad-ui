@@ -20,10 +20,14 @@ interface RecipeProps extends RecipeModel {
   testResult: any;
 }
 
-const formatURL = URL => {
+const formatURL = (URL: string): string => {
   const { host, path, hash, href } = url.parse(URL);
 
-  return host ? [host, path, hash].filter(Boolean).join('') : href;
+  if (host && href) {
+    return host ? [host, path, hash].filter(Boolean).join('') : href;
+  }
+
+  return '';
 };
 
 class Recipe extends React.Component<RecipeProps, {}> {
@@ -34,7 +38,7 @@ class Recipe extends React.Component<RecipeProps, {}> {
   }
 
   @autobind
-  handleSave(test) {
+  handleSave(test: any) {
     this.props.onSave(Object.assign({}, test, { id: this.props.ID }));
   }
 
@@ -43,7 +47,7 @@ class Recipe extends React.Component<RecipeProps, {}> {
     this.props.onCancel(this.props.ID);
   }
 
-  getStructureString(structure) {
+  getStructureString(structure: any) {
     let structureString = '';
     try {
       const safeDump = jsyaml.safeDump as any; // TODO remove when typings are updated
