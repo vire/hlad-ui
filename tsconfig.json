@@ -14,9 +14,8 @@
     "pretty": true,
     "skipLibCheck": true,
     "moduleResolution": "node",
-    "types": [
-      "node",
-      "mocha"
+    "typeRoots": [
+      "./node_modules/@types"
     ]
   },
   "exclude": [

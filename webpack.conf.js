@@ -40,7 +40,7 @@ const webpackConfig = {
         exclude: /node_modules/,
         loaders: [
           'babel-loader',
-          'ts-loader',
+          'awesome-typescript-loader'
         ],
       }, {
         test: /\.js$/,
