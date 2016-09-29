@@ -15,11 +15,8 @@
     "skipLibCheck": true,
     "moduleResolution": "node",
     "types": [
-      "node"
-    ],
-    "lib": [
-      "dom",
-      "es6"
+      "node",
+      "mocha"
     ]
   },
   "exclude": [
